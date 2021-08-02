@@ -1,29 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "blocktuner",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "BlockTuner",
+  "description": "A mod which helps you tune note blocks.",
   "authors": [
     "Me!"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://xwj.cool/",
+    "sources": "https://github.com/xwjcool123/BlockTunerMod"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "LGPLv3",
+  "icon": "assets/blocktuner/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "cool.xwj.blocktuner.BlockTuner"
+    ],
+    "client": [
+      "cool.xwj.blocktuner.BlockTunerClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "blocktuner.mixins.json"
   ],
 
   "depends": {
