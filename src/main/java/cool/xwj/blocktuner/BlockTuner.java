@@ -2,18 +2,20 @@ package cool.xwj.blocktuner;
 
 import cool.xwj.blocktuner.event.player.TuneNoteBlockCallback;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 //import static net.fabricmc.fabric.impl.networking.NetworkingImpl.MOD_ID;
 
 public class BlockTuner implements ModInitializer {
 
     public static final String MOD_ID = "blocktuner";
-    public static final Identifier TUNE = new Identifier(MOD_ID, "tune");
+    public static final Identifier TUNE = new Identifier(MOD_ID, "tune_screen");
+    public static final Identifier TUNE_PACKET = new Identifier(MOD_ID, "tune_packet");
     public static final ScreenHandlerType<TuningScreenHandler> TUNING_SCREEN_HANDLER;
 
     static {
@@ -23,6 +25,17 @@ public class BlockTuner implements ModInitializer {
     @Override
     public void onInitialize() {
         System.out.println("Now Loading Block Tuner!");
+
+        ServerPlayNetworking.registerGlobalReceiver(TUNE_PACKET, (server, player, handler, buf, responseSender) -> {
+
+            int note = buf.readByte();
+            BlockPos pos = buf.readBlockPos();
+
+            server.execute(() -> {
+                System.out.println("Tune " + pos + " to " + note);
+
+            });
+        });
 
 
 /*

@@ -7,10 +7,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.screen.*;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -30,6 +29,7 @@ public class TuneNoteBlockMixin{
 
     @Shadow @Final public static IntProperty NOTE;
 
+    // runs on server side while player trying to tune note blocks
     @Inject(method = "onUse",
             cancellable = true,
             at = @At(value = "INVOKE",
@@ -64,10 +64,10 @@ public class TuneNoteBlockMixin{
 
         }
 
-        // opens tuning GUI
+        // opens tuning GUI (WIP)
         if (player.getMainHandStack().getItem() == Items.BOOK && world.getBlockState(pos.up()).isAir()) {
 
-            System.out.println(state.get(NOTE));
+//            System.out.println(state.get(NOTE));
 
             player.openHandledScreen(createScreenHandlerFactory(state, world, pos));
 
@@ -79,9 +79,19 @@ public class TuneNoteBlockMixin{
 
     private static final Text SCREEN_TITLE = new TranslatableText("container.tune");
 
+
+
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+
+        ArrayPropertyDelegate propertyDelegate = new ArrayPropertyDelegate(3);
+        propertyDelegate.set(0, pos.getX());
+        propertyDelegate.set(1, pos.getY());
+        propertyDelegate.set(2, pos.getZ());
+
         return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> {
-            return new TuningScreenHandler(i, playerInventory);
+
+            return new TuningScreenHandler(i, playerInventory, propertyDelegate);
+
         }, SCREEN_TITLE);
     }
 
