@@ -33,9 +33,11 @@ public class BlockTuner implements ModInitializer {
 
             server.execute(() -> {
 //                System.out.println("Tuned " + pos + " to " + note);
-                player.world.setBlockState(pos, player.world.getBlockState(pos).with(NoteBlock.NOTE, note), 3);
-                if (player.world.getBlockState(pos.up()).isAir()) {
-                    player.world.addSyncedBlockEvent(pos, Blocks.NOTE_BLOCK, 0, 0);
+                if (player.world.getBlockState(pos).getBlock() == Blocks.NOTE_BLOCK) {
+                    player.world.setBlockState(pos, player.world.getBlockState(pos).with(NoteBlock.NOTE, note), 3);
+                    if (player.world.getBlockState(pos.up()).isAir()) {
+                        player.world.addSyncedBlockEvent(pos, Blocks.NOTE_BLOCK, 0, 0);
+                    }
                 }
             });
         });
