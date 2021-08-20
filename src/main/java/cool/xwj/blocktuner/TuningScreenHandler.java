@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 public class TuningScreenHandler extends ScreenHandler {
 
     PropertyDelegate propertyDelegate;
+    private BlockPos syncedPos = null;
 
     public TuningScreenHandler(int syncId, PlayerInventory playerInventory){
         this(syncId, playerInventory, new ArrayPropertyDelegate(3));
@@ -42,6 +43,9 @@ public class TuningScreenHandler extends ScreenHandler {
     }
 
     public BlockPos getSyncedPos() {
-        return new BlockPos(propertyDelegate.get(0), propertyDelegate.get(1), propertyDelegate.get(2));
+        if (syncedPos == null){
+            syncedPos = new BlockPos(propertyDelegate.get(0), propertyDelegate.get(1), propertyDelegate.get(2));
+        }
+        return syncedPos;
     }
 }
