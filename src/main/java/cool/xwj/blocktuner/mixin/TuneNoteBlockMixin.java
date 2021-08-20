@@ -3,8 +3,11 @@ package cool.xwj.blocktuner.mixin;
 import cool.xwj.blocktuner.TuningScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.*;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.text.Text;
@@ -13,6 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -70,9 +74,24 @@ public class TuneNoteBlockMixin{
 
     }
 
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
+        ItemStack stack = new ItemStack((NoteBlock) (Object) this);
+        int note = state.get(((NoteBlock) (Object) this).NOTE);
+
+        if (note != 0) {
+            NbtCompound tag = new NbtCompound();
+
+            tag.putString("note", String.valueOf(note));
+            stack.putSubTag("BlockStateTag", tag);
+
+        }
+
+        return stack;
+    }
+
+    // tuning UI
+
     private static final Text SCREEN_TITLE = new TranslatableText("container.tune");
-
-
 
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
 
