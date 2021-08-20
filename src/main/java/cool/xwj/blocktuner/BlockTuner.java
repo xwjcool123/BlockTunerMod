@@ -4,6 +4,8 @@ import cool.xwj.blocktuner.event.player.TuneNoteBlockCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.NoteBlock;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
@@ -32,8 +34,9 @@ public class BlockTuner implements ModInitializer {
             BlockPos pos = buf.readBlockPos();
 
             server.execute(() -> {
-                System.out.println("Tune " + pos + " to " + note);
-
+//                System.out.println("Tuned " + pos + " to " + note);
+                player.world.setBlockState(pos, player.world.getBlockState(pos).with(NoteBlock.NOTE, note), 3);
+                player.world.addSyncedBlockEvent(pos, Blocks.NOTE_BLOCK, 0, 0);
             });
         });
 
