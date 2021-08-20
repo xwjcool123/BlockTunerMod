@@ -35,31 +35,31 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         // Fancy(?) keyboard
 
-        this.addButton(new BlackKeyWidget(this.x+13, this.y+26, 0));    //
-        this.addButton(new WhiteKeyWidget(this.x+18, this.y+43, 1));        //
-        this.addButton(new BlackKeyWidget(this.x+23, this.y+26, 2));    //
-        this.addButton(new WhiteKeyWidget(this.x+28, this.y+43, 3));        //
-        this.addButton(new BlackKeyWidget(this.x+33, this.y+26, 4));    //
-        this.addButton(new WhiteKeyWidget(this.x+38, this.y+43, 5));        //
-        this.addButton(new WhiteKeyWidget(this.x+48, this.y+43, 6));        //
-        this.addButton(new BlackKeyWidget(this.x+53, this.y+26, 7));    //
-        this.addButton(new WhiteKeyWidget(this.x+58, this.y+43, 8));        //
-        this.addButton(new BlackKeyWidget(this.x+63, this.y+26, 9));    //
-        this.addButton(new WhiteKeyWidget(this.x+68, this.y+43, 10));       //
-        this.addButton(new WhiteKeyWidget(this.x+78, this.y+43, 11));       //
-        this.addButton(new BlackKeyWidget(this.x+83, this.y+26, 12));   //
-        this.addButton(new WhiteKeyWidget(this.x+88, this.y+43, 13));       //
-        this.addButton(new BlackKeyWidget(this.x+93, this.y+26, 14));   //
-        this.addButton(new WhiteKeyWidget(this.x+98, this.y+43, 15));       //
-        this.addButton(new BlackKeyWidget(this.x+103, this.y+26, 16));  //
-        this.addButton(new WhiteKeyWidget(this.x+108, this.y+43, 17));      //
-        this.addButton(new WhiteKeyWidget(this.x+118, this.y+43, 18));      //
-        this.addButton(new BlackKeyWidget(this.x+123, this.y+26, 19));  //
-        this.addButton(new WhiteKeyWidget(this.x+128, this.y+43, 20));      //
-        this.addButton(new BlackKeyWidget(this.x+133, this.y+26, 21));  //
-        this.addButton(new WhiteKeyWidget(this.x+138, this.y+43, 22));      //
-        this.addButton(new WhiteKeyWidget(this.x+148, this.y+43, 23));      //
-        this.addButton(new BlackKeyWidget(this.x+153, this.y+26, 24));  //
+        this.addButton(new BlackKeyWidget(this.x+12, this.y+28, 0));    //
+        this.addButton(new WhiteKeyWidget(this.x+18, this.y+44, 1));        //
+        this.addButton(new BlackKeyWidget(this.x+23, this.y+28, 2));    //
+        this.addButton(new WhiteKeyWidget(this.x+28, this.y+44, 3));        //
+        this.addButton(new BlackKeyWidget(this.x+34, this.y+28, 4));    //
+        this.addButton(new WhiteKeyWidget(this.x+38, this.y+44, 5));        //
+        this.addButton(new WhiteKeyWidget(this.x+48, this.y+44, 6));        //
+        this.addButton(new BlackKeyWidget(this.x+52, this.y+28, 7));    //
+        this.addButton(new WhiteKeyWidget(this.x+58, this.y+44, 8));        //
+        this.addButton(new BlackKeyWidget(this.x+64, this.y+28, 9));    //
+        this.addButton(new WhiteKeyWidget(this.x+68, this.y+44, 10));       //
+        this.addButton(new WhiteKeyWidget(this.x+78, this.y+44, 11));       //
+        this.addButton(new BlackKeyWidget(this.x+82, this.y+28, 12));   //
+        this.addButton(new WhiteKeyWidget(this.x+88, this.y+44, 13));       //
+        this.addButton(new BlackKeyWidget(this.x+93, this.y+28, 14));   //
+        this.addButton(new WhiteKeyWidget(this.x+98, this.y+44, 15));       //
+        this.addButton(new BlackKeyWidget(this.x+104, this.y+28, 16));  //
+        this.addButton(new WhiteKeyWidget(this.x+108, this.y+44, 17));      //
+        this.addButton(new WhiteKeyWidget(this.x+118, this.y+44, 18));      //
+        this.addButton(new BlackKeyWidget(this.x+122, this.y+28, 19));  //
+        this.addButton(new WhiteKeyWidget(this.x+128, this.y+44, 20));      //
+        this.addButton(new BlackKeyWidget(this.x+134, this.y+28, 21));  //
+        this.addButton(new WhiteKeyWidget(this.x+138, this.y+44, 22));      //
+        this.addButton(new WhiteKeyWidget(this.x+148, this.y+44, 23));      //
+        this.addButton(new BlackKeyWidget(this.x+152, this.y+28, 24));  //
 
         pos = new BlockPos(client.player.raycast(5., 0.0f, false).getPos());
     }
