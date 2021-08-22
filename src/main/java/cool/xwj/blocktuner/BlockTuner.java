@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -38,6 +39,8 @@ public class BlockTuner implements ModInitializer {
                     if (player.world.getBlockState(pos.up()).isAir()) {
                         player.world.addSyncedBlockEvent(pos, Blocks.NOTE_BLOCK, 0, 0);
                     }
+
+                    player.swingHand(Hand.MAIN_HAND);
                 }
             });
         });
