@@ -6,7 +6,7 @@
   "name": "BlockTuner",
   "description": "A mod which helps you tune note blocks.",
   "authors": [
-    "Me!"
+    "xwjcool"
   ],
   "contact": {
     "homepage": "https://xwj.cool/",
@@ -32,7 +32,9 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.16.x",
+    "fabric-networking-api-v1": "*",
+    "fabric-screen-handler-api-v1": "*"
   },
   "suggests": {
     "another-mod": "*"
