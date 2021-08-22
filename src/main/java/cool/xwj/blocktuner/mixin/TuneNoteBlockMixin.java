@@ -1,6 +1,7 @@
 package cool.xwj.blocktuner.mixin;
 
 import cool.xwj.blocktuner.TuningScreenHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.client.gui.screen.Screen;
@@ -26,9 +27,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NoteBlock.class)
-public class TuneNoteBlockMixin{
+public class TuneNoteBlockMixin extends Block {
 
     @Shadow @Final public static IntProperty NOTE;
+
+    public TuneNoteBlockMixin(Settings settings) {
+        super(settings);
+    }
 
     // runs on server side while player trying to tune note blocks
     @Inject(method = "onUse",
