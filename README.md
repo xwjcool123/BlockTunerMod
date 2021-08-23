@@ -14,6 +14,8 @@ Put this mod in your `mods` folder.
 
 This mod also works on servers and require no client installation.
 
+You can get the latest copy [here](https://github.com/xwjcool123/BlockTunerMod/releases/latest) or find a specific release [here](https://github.com/xwjcool123/BlockTunerMod/releases)
+
 ### How to Use BlockTuner
 
 Right click note blocks with following items to perform actions:
