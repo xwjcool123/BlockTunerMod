@@ -10,11 +10,20 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 public class BlockTunerClient implements ClientModInitializer {
 
     private static boolean keyToPiano = false;
+    private static boolean playMode = false;
 
     @Override
     public void onInitializeClient() {
         ScreenRegistry.register(BlockTuner.TUNING_SCREEN_HANDLER, TuningScreen::new);
 
+    }
+
+    public static boolean isPlayMode() {
+        return playMode;
+    }
+
+    public static void togglePlayMode() {
+        playMode = !playMode;
     }
 
     public static boolean isKeyToPiano() {

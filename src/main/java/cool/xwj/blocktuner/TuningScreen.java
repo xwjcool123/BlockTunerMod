@@ -64,7 +64,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         this.addButton(new BlackKeyWidget(this.x + 134, this.y + 32, 21));
         this.addButton(new BlackKeyWidget(this.x + 152, this.y + 32, 24));
 
-        this.addButton(new keyToPianoToggle(this.x + 142, this.y + 7));
+        this.addButton(new PlayModeToggle(this.x + 128, this.y + 7));
+        this.addButton(new KeyToPianoToggle(this.x + 142, this.y + 7));
 
     }
 
@@ -99,9 +100,9 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void onClick(double mouseX, double mouseY){
 
-            if (pressedKey != null) {
+/*            if (pressedKey != null) {
                 pressedKey.onRelease(mouseX, mouseY);
-            }
+            }*/
 
             pressedKey = this;
             played = true;
@@ -120,7 +121,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             assert client.player != null;
             client.player.swingHand(Hand.MAIN_HAND);
 
-            if (hasControlDown()){
+            if (!BlockTunerClient.isPlayMode()){
                 client.player.closeHandledScreen();
             }
 
@@ -195,8 +196,36 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     }
 
-    static class keyToPianoToggle extends ClickableWidget{
-        public keyToPianoToggle(int x, int y) {
+    static class PlayModeToggle extends ClickableWidget{
+        public PlayModeToggle(int x, int y) {
+            super(x, y, 12, 9, LiteralText.EMPTY);
+        }
+
+        @Override
+        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+            int status = 0;
+            if (BlockTunerClient.isPlayMode()) {
+                status = 2;
+            }
+            if (this.isHovered()) {
+                status += 1;
+            }
+
+            this.drawTexture(matrices, this.x, this.y, 224, 16 * status, 11, 11);
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY){
+            BlockTunerClient.togglePlayMode();
+        }
+
+    }
+
+    static class KeyToPianoToggle extends ClickableWidget{
+        public KeyToPianoToggle(int x, int y) {
             super(x, y, 12, 9, LiteralText.EMPTY);
         }
 
@@ -246,7 +275,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         if (BlockTunerClient.isKeyToPiano() && keyCode != 256) {
             int note = keyToNote(scanCode);
-            if (note >= 0 && note <= 24 && (pressedKey == null || pressedKey.note != note)) {
+            if (note >= 0 && note <= 24 && !pianoKeys[note].played) {
                 pianoKeys[note].onClick(0, 0);
             }
 
@@ -258,8 +287,9 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers){
-        if (pressedKey != null && keyToNote(scanCode) == pressedKey.note) {
-            pressedKey.onRelease(0, 0);
+        int note = keyToNote(scanCode);
+        if (note >= 0 && note <= 24) {
+            pianoKeys[note].onRelease(0, 0);
         }
         return super.keyReleased(keyCode, scanCode, modifiers);
     }
