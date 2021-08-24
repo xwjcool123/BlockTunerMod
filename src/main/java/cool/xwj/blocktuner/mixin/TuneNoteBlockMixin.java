@@ -4,12 +4,14 @@ import cool.xwj.blocktuner.TuningScreenHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.*;
+import net.minecraft.screen.ArrayPropertyDelegate;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -19,6 +21,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -79,9 +82,10 @@ public class TuneNoteBlockMixin extends Block {
 
     }
 
+    @Override
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         ItemStack stack = new ItemStack((NoteBlock) (Object) this);
-        int note = state.get(((NoteBlock) (Object) this).NOTE);
+        int note = state.get(NoteBlock.NOTE);
 
         if (note != 0) {
             NbtCompound tag = new NbtCompound();
@@ -94,10 +98,17 @@ public class TuneNoteBlockMixin extends Block {
         return stack;
     }
 
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+        if (placer instanceof PlayerEntity && state.get(NoteBlock.NOTE) == 0)
+            ((PlayerEntity) placer).openHandledScreen(createScreenHandlerFactory(state, world, pos));
+    }
+
     // tuning UI
 
     private static final Text SCREEN_TITLE = new TranslatableText("container.tune");
 
+    @Override
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
 
         ArrayPropertyDelegate propertyDelegate = new ArrayPropertyDelegate(3);
@@ -105,11 +116,7 @@ public class TuneNoteBlockMixin extends Block {
         propertyDelegate.set(1, pos.getY());
         propertyDelegate.set(2, pos.getZ());
 
-        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> {
-
-            return new TuningScreenHandler(i, playerInventory, propertyDelegate);
-
-        }, SCREEN_TITLE);
+        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TuningScreenHandler(i, playerInventory, propertyDelegate), SCREEN_TITLE);
     }
 
 }
