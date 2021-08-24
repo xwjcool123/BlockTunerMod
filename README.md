@@ -18,6 +18,10 @@ You can get the latest copy [here](https://github.com/xwjcool123/BlockTunerMod/r
 
 ### How to Use BlockTuner
 
+Place an untuned note block will open tuning GUI automatically.
+
+Middle click on note blocks will give you readily tuned note blocks. Placing these won't open tuning GUI.
+
 Right click note blocks with following items to perform actions:
 
 * Blaze rod - play with right clicks without tuning
@@ -33,11 +37,7 @@ Top-right corner (from left to right)
 * MIDI Device - TBD
 
 ### Keyboard Mapping:
-* `G B H N J M` - The first octave
-* `, L . : /` - The second octave (alternative)
-* `Q 2 W 3 E R 5 T 6 Y 7 U` - The second octave
-* `I 9 O 0 P [ =` - The third octave
-
+![](https://xwj.cool/img/blocktuner/keymap.png)
 ## License
 
 (C)Copyright 2021, xwjcool
