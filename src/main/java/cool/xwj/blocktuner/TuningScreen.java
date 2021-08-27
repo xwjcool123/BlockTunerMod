@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,6 +18,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import javax.sound.midi.*;
 
 public class TuningScreen extends HandledScreen<ScreenHandler> {
 
@@ -24,12 +26,18 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     private BlockPos pos = null;
     private PianoKeyWidget pressedKey = null;
     private final PianoKeyWidget[] pianoKeys = new PianoKeyWidget[25];
+    private MidiSwitch midiSwitch = null;
+    private MidiDevice currentDevice;
+    private final MidiReceiver receiver;
+
 
     private static final Identifier TEXTURE = new Identifier("blocktuner", "textures/gui/container/tune.png");
 
     public TuningScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         screenHandler = (TuningScreenHandler) handler;
+        currentDevice = BlockTunerClient.getCurrentDevice();
+        receiver = new MidiReceiver();
     }
 
     @Override
@@ -66,6 +74,17 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         this.addButton(new PlayModeToggle(this.x + 128, this.y + 7));
         this.addButton(new KeyToPianoToggle(this.x + 142, this.y + 7));
+        midiSwitch = this.addButton(new MidiSwitch(this.x + 159, this.y + 7));
+
+        if (currentDevice != null && !currentDevice.isOpen()) {
+            try {
+                currentDevice.open();
+                midiSwitch.available = true;
+                currentDevice.getTransmitter().setReceiver(receiver);
+            } catch (MidiUnavailableException e) {
+                midiSwitch.available = false;
+            }
+        }
 
     }
 
@@ -74,6 +93,19 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+    }
+
+    @Override
+    protected void drawMouseoverTooltip(MatrixStack matrices, int x, int y) {
+        assert this.client != null;
+        assert this.client.player != null;
+        if (this.client.player.inventory.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
+            this.renderTooltip(matrices, this.focusedSlot.getStack(), x, y);
+        } else if (midiSwitch != null && midiSwitch.isHovered()) {
+            this.renderTooltip(matrices, midiSwitch.getDeviceName(), x, y);
+        }
+
+
     }
 
     @Override
@@ -100,10 +132,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void onClick(double mouseX, double mouseY){
 
-/*            if (pressedKey != null) {
-                pressedKey.onRelease(mouseX, mouseY);
-            }*/
-
             pressedKey = this;
             played = true;
 
@@ -122,7 +150,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             client.player.swingHand(Hand.MAIN_HAND);
 
             if (!BlockTunerClient.isPlayMode()){
-                client.player.closeHandledScreen();
+                onClose();
             }
 
         }
@@ -196,9 +224,9 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     }
 
-    static class PlayModeToggle extends ClickableWidget{
+    static class PlayModeToggle extends ClickableWidget implements TuningControl{
         public PlayModeToggle(int x, int y) {
-            super(x, y, 12, 9, LiteralText.EMPTY);
+            super(x, y, 9, 9, LiteralText.EMPTY);
         }
 
         @Override
@@ -214,7 +242,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 status += 1;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 224, 16 * status, 11, 11);
+            this.drawTexture(matrices, this.x, this.y, 224, 16 * status, 9, 11);
         }
 
         @Override
@@ -224,7 +252,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     }
 
-    static class KeyToPianoToggle extends ClickableWidget{
+    static class KeyToPianoToggle extends ClickableWidget implements TuningControl{
         public KeyToPianoToggle(int x, int y) {
             super(x, y, 12, 9, LiteralText.EMPTY);
         }
@@ -251,6 +279,71 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
     }
+
+    class MidiSwitch extends ClickableWidget implements TuningControl{
+
+        private Text deviceName;
+        private boolean available = true;
+
+        public MidiSwitch(int x, int y) {
+            super(x, y, 9, 9, LiteralText.EMPTY);
+            if (currentDevice == null) {
+                deviceName = new LiteralText("(None)");
+            } else {
+                deviceName = new LiteralText(currentDevice.getDeviceInfo().getName());
+            }
+        }
+
+        @Override
+        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+            int status = 0;
+            if (BlockTunerClient.getDeviceIndex() > 0) {
+                status = 2;
+                if (!available) {
+                    status = 4;
+                }
+            }
+            if (this.isHovered()) {
+                status += 1;
+            }
+
+            this.drawTexture(matrices, this.x, this.y, 224, 64 + 16 * status, 11, 11);
+        }
+
+        public Text getDeviceName() {
+            return deviceName;
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY){
+
+            if (currentDevice != null && currentDevice.isOpen()) {
+                currentDevice.close();
+            }
+
+            BlockTunerClient.loopDeviceIndex();
+            currentDevice = BlockTunerClient.getCurrentDevice();
+
+            if (currentDevice != null) {
+                deviceName = new LiteralText(currentDevice.getDeviceInfo().getName());
+                try {
+                    currentDevice.open();
+                    available = true;
+                    currentDevice.getTransmitter().setReceiver(receiver);
+                } catch (MidiUnavailableException e) {
+                    available = false;
+                }
+            } else {
+                deviceName = new LiteralText("(None)");
+            }
+        }
+
+    }
+
+    interface TuningControl extends Element {}
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
@@ -292,6 +385,34 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             pianoKeys[note].onRelease(0, 0);
         }
         return super.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    public void onClose() {
+        super.onClose();
+        if (currentDevice != null && currentDevice.isOpen()) {
+            currentDevice.close();
+        }
+    }
+
+    class MidiReceiver implements Receiver {
+        public MidiReceiver() {}
+        public void send(MidiMessage msg, long timeStamp) {
+            byte[] message = msg.getMessage();
+            if (message.length == 3 && message[0] <= -97 && message[1] >= 54 && message[1] <= 78) {
+                if (message[0] >= -112 && message[2] != 0) {
+
+                    // MIDI note on
+                    pianoKeys[message[1] - 54].onClick(0, 0);
+
+                } else {
+
+                    // MIDI note off
+                    pianoKeys[message[1] - 54].onRelease(0, 0);
+
+                }
+            }
+        }
+        public void close() {}
     }
 
     protected int keyToNote(int scanCode) {
