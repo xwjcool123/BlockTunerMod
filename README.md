@@ -10,7 +10,7 @@ This mod requires fabric API.
 
 ### Installation
 
-Put this mod in your `mods` folder. You also need to install [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) ifgyou haven't installed it yet.
+Put this mod in your `mods` folder. You also need to install [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) if you haven't installed it yet.
 
 This mod also works on servers and require no client installation.
 
