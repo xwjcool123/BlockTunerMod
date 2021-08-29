@@ -1,3 +1,4 @@
 {
-  "container.tune": "Tune & Play"
+  "container.tune": "Tune & Play",
+  "midi_device.empty": "(None)"
 }

@@ -15,6 +15,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -288,7 +289,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         public MidiSwitch(int x, int y) {
             super(x, y, 9, 9, LiteralText.EMPTY);
             if (currentDevice == null) {
-                deviceName = new LiteralText("(None)");
+                deviceName = new TranslatableText("midi_device.empty");
             } else {
                 deviceName = new LiteralText(currentDevice.getDeviceInfo().getName());
             }
@@ -337,7 +338,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                     available = false;
                 }
             } else {
-                deviceName = new LiteralText("(None)");
+                deviceName = new TranslatableText("midi_device.empty");
             }
         }
 
