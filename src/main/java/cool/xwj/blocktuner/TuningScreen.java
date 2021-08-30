@@ -389,10 +389,11 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     }
 
     public void onClose() {
-        super.onClose();
         if (currentDevice != null && currentDevice.isOpen()) {
             currentDevice.close();
         }
+        receiver.close();
+        super.onClose();
     }
 
     class MidiReceiver implements Receiver {
