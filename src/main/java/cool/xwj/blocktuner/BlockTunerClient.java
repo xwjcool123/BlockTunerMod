@@ -26,7 +26,7 @@ public class BlockTunerClient implements ClientModInitializer {
         MidiDevice device;
         transmitters.add(null);
 
-        // Get a list of MIDI input devices.
+        // Get a list of MIDI input device.
 
         MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
 
