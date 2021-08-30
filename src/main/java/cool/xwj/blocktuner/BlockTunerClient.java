@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.*;
+import java.util.Objects;
 import java.util.Vector;
 
 
@@ -34,7 +35,7 @@ public class BlockTunerClient implements ClientModInitializer {
             try {
                 device = MidiSystem.getMidiDevice(info);
 
-                if (device.getMaxTransmitters() != 0) {
+                if (device.getMaxTransmitters() != 0 && !Objects.equals(info.getVendor(), "Oracle Corporation")) {
                     transmitters.add(device);
                 }
 
