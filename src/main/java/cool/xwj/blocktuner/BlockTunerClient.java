@@ -23,25 +23,7 @@ public class BlockTunerClient implements ClientModInitializer {
     public void onInitializeClient() {
         ScreenRegistry.register(BlockTuner.TUNING_SCREEN_HANDLER, TuningScreen::new);
 
-        MidiDevice device;
-        transmitters.add(null);
-
-        // Get a list of MIDI input device.
-
-        MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
-
-        for (MidiDevice.Info info : infos) {
-
-            try {
-                device = MidiSystem.getMidiDevice(info);
-
-                if (device.getMaxTransmitters() != 0 && !Objects.equals(info.getVendor(), "Oracle Corporation")) {
-                    transmitters.add(device);
-                }
-
-            } catch (MidiUnavailableException ignored) {}
-
-        }
+        refreshMidiDevice();
 
     }
 
@@ -70,12 +52,39 @@ public class BlockTunerClient implements ClientModInitializer {
             deviceIndex += 1;
         } else {
             deviceIndex = 0;
+            refreshMidiDevice();
         }
     }
 
     @Nullable
     public static MidiDevice getCurrentDevice(){
         return transmitters.get(deviceIndex);
+    }
+
+    private static void refreshMidiDevice(){
+        MidiDevice device;
+
+        transmitters.clear();
+
+        transmitters.add(null);
+
+        // Get a list of MIDI input device.
+
+        MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
+
+        for (MidiDevice.Info info : infos) {
+
+            try {
+                device = MidiSystem.getMidiDevice(info);
+
+                if (device.getMaxTransmitters() != 0 && !Objects.equals(info.getVendor(), "Oracle Corporation")) {
+                    transmitters.add(device);
+                }
+
+            } catch (MidiUnavailableException ignored) {}
+
+        }
+
     }
 
 }

@@ -6,7 +6,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -225,7 +224,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     }
 
-    static class PlayModeToggle extends ClickableWidget implements TuningControl{
+    static class PlayModeToggle extends ClickableWidget{
         public PlayModeToggle(int x, int y) {
             super(x, y, 9, 9, LiteralText.EMPTY);
         }
@@ -253,7 +252,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     }
 
-    static class KeyToPianoToggle extends ClickableWidget implements TuningControl{
+    static class KeyToPianoToggle extends ClickableWidget{
         public KeyToPianoToggle(int x, int y) {
             super(x, y, 12, 9, LiteralText.EMPTY);
         }
@@ -281,7 +280,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     }
 
-    class MidiSwitch extends ClickableWidget implements TuningControl{
+    class MidiSwitch extends ClickableWidget{
 
         private Text deviceName;
         private boolean available = true;
@@ -343,8 +342,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
     }
-
-    interface TuningControl extends Element {}
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
