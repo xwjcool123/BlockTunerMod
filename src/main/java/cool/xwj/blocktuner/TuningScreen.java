@@ -105,7 +105,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             this.renderTooltip(matrices, midiSwitch.getDeviceName(), x, y);
         }
 
-
     }
 
     @Override
@@ -401,12 +400,18 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 if (message[0] >= -112 && message[2] != 0) {
 
                     // MIDI note on
-                    pianoKeys[message[1] - 54].onClick(0, 0);
+                    assert client != null;
+                    client.execute(()-> {
+                        pianoKeys[message[1] - 54].onClick(0, 0);
+                    });
 
                 } else {
 
                     // MIDI note off
-                    pianoKeys[message[1] - 54].onRelease(0, 0);
+                    assert client != null;
+                    client.execute(()-> {
+                        pianoKeys[message[1] - 54].onRelease(0, 0);;
+                    });
 
                 }
             }
