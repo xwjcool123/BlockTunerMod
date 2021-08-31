@@ -23,7 +23,7 @@ public class BlockTunerClient implements ClientModInitializer {
     public void onInitializeClient() {
         ScreenRegistry.register(BlockTuner.TUNING_SCREEN_HANDLER, TuningScreen::new);
 
-        refreshMidiDevice();
+        transmitters.add(null);
 
     }
 
@@ -48,11 +48,13 @@ public class BlockTunerClient implements ClientModInitializer {
     }
 
     public static void loopDeviceIndex() {
+        if (deviceIndex == 0) {
+            refreshMidiDevice();
+        }
         if (deviceIndex < transmitters.size() - 1) {
             deviceIndex += 1;
         } else {
             deviceIndex = 0;
-            refreshMidiDevice();
         }
     }
 
