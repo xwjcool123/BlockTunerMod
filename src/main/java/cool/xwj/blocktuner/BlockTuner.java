@@ -8,7 +8,6 @@ import net.minecraft.block.NoteBlock;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -45,8 +44,7 @@ public class BlockTuner implements ModInitializer {
                     if (world.getBlockState(pos.up()).isAir()) {
 
 //                        world.addSyncedBlockEvent(pos, Blocks.NOTE_BLOCK, 0, 0);
-                        float pitch = (float)Math.pow(2.0D, (double)(note - 12) / 12.0D);
-                        world.playSound(null, pos, (world.getBlockState(pos).get(NoteBlock.INSTRUMENT)).getSound(), SoundCategory.RECORDS, 3.0F, pitch);
+                        ((NoteBlock) world.getBlockState(pos).getBlock()).onSyncedBlockEvent(world.getBlockState(pos), world, pos, 0, 0);
                         ((ServerWorld)world).spawnParticles(ParticleTypes.NOTE, pos.getX() + 0.5D, pos.getY() + 1.2D, pos.getZ() + 0.5D, 0, (double)note / 24.0D, 0.0D, 0.0D, 1.0D);
 
                     }
