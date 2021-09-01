@@ -397,21 +397,16 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         public void send(MidiMessage msg, long timeStamp) {
             byte[] message = msg.getMessage();
             if (message.length == 3 && message[0] <= -97 && message[1] >= 54 && message[1] <= 78) {
+                assert client != null;
                 if (message[0] >= -112 && message[2] != 0) {
 
                     // MIDI note on
-                    assert client != null;
-                    client.execute(()-> {
-                        pianoKeys[message[1] - 54].onClick(0, 0);
-                    });
+                    client.execute(()-> pianoKeys[message[1] - 54].onClick(0, 0));
 
                 } else {
 
                     // MIDI note off
-                    assert client != null;
-                    client.execute(()-> {
-                        pianoKeys[message[1] - 54].onRelease(0, 0);;
-                    });
+                    client.execute(()-> pianoKeys[message[1] - 54].onRelease(0, 0));
 
                 }
             }
