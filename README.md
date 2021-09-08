@@ -32,9 +32,9 @@ Right click note blocks with following items to perform actions:
 
 Top-right corner (from left to right)
 
-* Play mode - toggle whether the GUI will turn off immediately upon clicking a note on the piano keyboard.
-* Typing keyboard to piano keyboard - toggle whether you want to play the piano keyboard using your computer keyboard.
-* MIDI Device - Click to cycle through available MIDI input devices. The icon shows red if the device is currently occupied by other programs.
+* ![](https://xwj.cool/img/blocktuner/btWidget1.png) Play mode - toggle whether the GUI will turn off immediately upon clicking a note on the piano keyboard.
+* ![](https://xwj.cool/img/blocktuner/btWidget2.png) Typing keyboard to piano keyboard - toggle whether you want to play the piano keyboard using your computer keyboard.
+* ![](https://xwj.cool/img/blocktuner/btWidget3.png) MIDI Device - Click to cycle through available MIDI input devices. The icon shows red if the device is currently occupied by other programs.
 
 ### Keyboard Mapping:
 ![](https://xwj.cool/img/blocktuner/keymap.png)
