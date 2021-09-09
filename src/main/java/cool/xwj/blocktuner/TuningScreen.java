@@ -89,9 +89,9 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         this.addButton(new BlackKeyWidget(this.x + 134, this.y + 32, 21));
         this.addButton(new BlackKeyWidget(this.x + 152, this.y + 32, 24));
 
-        this.addButton(new PlayModeToggle(this.x + 128, this.y + 7));
-        this.addButton(new KeyToPianoToggle(this.x + 142, this.y + 7));
-        midiSwitch = this.addButton(new MidiSwitch(this.x + 159, this.y + 7));
+        this.addButton(new PlayModeToggle(this.x + 118, this.y - 16));
+        this.addButton(new KeyToPianoToggle(this.x + 136, this.y - 16));
+        midiSwitch = this.addButton(new MidiSwitch(this.x + 154, this.y - 16));
 
         if (currentDevice != null && !currentDevice.isOpen()) {
             try {
@@ -119,7 +119,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         if (this.client.player.inventory.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
             this.renderTooltip(matrices, this.focusedSlot.getStack(), x, y);
         } else if (midiSwitch != null && midiSwitch.isHovered()) {
-            this.renderTooltip(matrices, midiSwitch.getDeviceName(), x, y);
+            this.renderTooltip(matrices, midiSwitch.getDeviceName(), x , y);
         }
 
     }
@@ -242,7 +242,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     static class PlayModeToggle extends ClickableWidget{
         public PlayModeToggle(int x, int y) {
-            super(x, y, 9, 9, LiteralText.EMPTY);
+            super(x, y, 16, 16, LiteralText.EMPTY);
         }
 
         @Override
@@ -258,7 +258,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 status += 1;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 224, 16 * status, 9, 11);
+            this.drawTexture(matrices, this.x, this.y, 224, 16 * status, 16, 16);
         }
 
         @Override
@@ -270,7 +270,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     static class KeyToPianoToggle extends ClickableWidget{
         public KeyToPianoToggle(int x, int y) {
-            super(x, y, 12, 9, LiteralText.EMPTY);
+            super(x, y, 16, 16, LiteralText.EMPTY);
         }
 
         @Override
@@ -286,7 +286,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 status += 1;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 240, 16 * status, 11, 11);
+            this.drawTexture(matrices, this.x, this.y, 240, 16 * status, 16, 16);
         }
 
         @Override
@@ -302,7 +302,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         private boolean available = true;
 
         public MidiSwitch(int x, int y) {
-            super(x, y, 9, 9, LiteralText.EMPTY);
+            super(x, y, 16, 16, LiteralText.EMPTY);
             if (currentDevice == null) {
                 deviceName = new TranslatableText("midi_device.empty");
             } else {
@@ -326,7 +326,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 status += 1;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 224, 64 + 16 * status, 11, 11);
+            this.drawTexture(matrices, this.x, this.y, 224, 64 + 16 * status, 16, 16);
         }
 
         public Text getDeviceName() {
