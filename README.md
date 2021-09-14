@@ -23,6 +23,7 @@ Right clock on note blocks to open tuning GUI. Placing an untuned note block als
 Ctrl + middle click on note blocks will give you readily tuned note blocks. Placing these won't open tuning GUI.
 
 Right click note blocks with blaze rods to play with right clicks without tuning.
+Toggle BlockTuner with command `/blocktuner`
 
 ### Tuning GUI
 
