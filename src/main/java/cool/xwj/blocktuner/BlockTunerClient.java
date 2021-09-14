@@ -20,7 +20,9 @@ package cool.xwj.blocktuner;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.*;
@@ -33,6 +35,10 @@ public class BlockTunerClient implements ClientModInitializer {
 
     private static boolean keyToPiano = false;
     private static boolean playMode = false;
+
+    // TODO: allow player to choose whether to use BlockTuner
+    public static boolean tuningOn = true;
+
     public static final Vector<MidiDevice> transmitters = new Vector<>(0, 1);
     private static int deviceIndex = 0;
 
@@ -41,6 +47,14 @@ public class BlockTunerClient implements ClientModInitializer {
         ScreenRegistry.register(BlockTuner.TUNING_SCREEN_HANDLER, TuningScreen::new);
 
         transmitters.add(null);
+
+        // Handshake with a BlockTuner server
+        ClientPlayNetworking.registerGlobalReceiver(BlockTuner.CLIENT_CHECK, (client, handler, buf, responseSender) -> {
+            int serverProtocol = buf.readInt();
+            if (BlockTuner.TUNING_PROTOCOL == serverProtocol) {
+                ClientPlayNetworking.send(BlockTuner.CLIENT_CHECK, PacketByteBufs.empty());
+            }
+        });
 
     }
 

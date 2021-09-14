@@ -17,6 +17,7 @@
 
 package cool.xwj.blocktuner.mixin;
 
+import cool.xwj.blocktuner.BlockTuner;
 import cool.xwj.blocktuner.TuningScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,6 +33,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -79,9 +81,8 @@ public class TuneNoteBlockMixin extends Block {
         }
 
         // opens tuning GUI (WIP)
-        if (player.getMainHandStack().getItem() == Items.BOOK) {
-
-//            System.out.println(state.get(NOTE));
+//        if (player.getMainHandStack().getItem() == Items.BOOK) {
+        if (BlockTuner.activeTuners.contains((ServerPlayerEntity) player)) {
 
             player.openHandledScreen(createScreenHandlerFactory(state, world, pos));
 
@@ -110,7 +111,7 @@ public class TuneNoteBlockMixin extends Block {
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        if (!world.isClient && placer instanceof PlayerEntity && state.get(NoteBlock.NOTE) == 0) {
+        if (placer instanceof ServerPlayerEntity && BlockTuner.activeTuners.contains((ServerPlayerEntity) placer) && state.get(NoteBlock.NOTE) == 0) {
             ((PlayerEntity) placer).openHandledScreen(createScreenHandlerFactory(state, world, pos));
         }
     }

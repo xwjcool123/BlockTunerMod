@@ -1,4 +1,7 @@
 {
+  "blocktuner.enable": "BlockTuner\u5df2\u5f00\u542f",
+  "blocktuner.disable": "BlockTuner\u5df2\u5173\u95ed",
+  "blocktuner.available": "\u672c\u670d\u52a1\u5668\u5df2\u5b89\u88c5BlockTuner",
   "container.tune": "\u8c03\u97f3&\u6f14\u594f",
   "midi_device.empty": "(\u65e0)"
 }

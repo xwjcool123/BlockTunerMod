@@ -18,15 +18,11 @@ You can get the latest copy [here](https://github.com/xwjcool123/BlockTunerMod/r
 
 ### How to Use BlockTuner
 
-Place an untuned note block will open tuning GUI automatically.
+Right clock on note blocks to open tuning GUI. Placing an untuned note block also opens tuning GUI automatically.
 
-Middle click on note blocks will give you readily tuned note blocks. Placing these won't open tuning GUI.
+Ctrl + middle click on note blocks will give you readily tuned note blocks. Placing these won't open tuning GUI.
 
-Right click note blocks with following items to perform actions:
-
-* Blaze rod - play with right clicks without tuning
-* Barrier - reset note to 0 (initially F#)
-* Book - open tuning/Playing GUI (*require a client installation*) (details below)
+Right click note blocks with blaze rods to play with right clicks without tuning.
 
 ### Tuning GUI
 
@@ -44,6 +40,6 @@ Copyright (C) 2021, xwjcool.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
+This program is distributed in the hospe that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.

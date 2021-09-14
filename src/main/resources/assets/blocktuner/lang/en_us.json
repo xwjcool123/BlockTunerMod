@@ -1,4 +1,7 @@
 {
+  "blocktuner.enable": "BlockTuner enabled",
+  "blocktuner.disable": "BlockTuner disabled",
+  "blocktuner.available": "BlockTuner is available on this server",
   "container.tune": "Tune & Play",
   "midi_device.empty": "(None)"
 }
