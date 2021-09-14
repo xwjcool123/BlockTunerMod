@@ -18,9 +18,12 @@
 package cool.xwj.blocktuner.mixin;
 
 import cool.xwj.blocktuner.TuningScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.NoteBlock;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -64,17 +67,6 @@ public class TuneNoteBlockMixin extends Block {
 
     private void onTune(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir){
 
-        // resets the note
-        if (player.getMainHandStack().getItem() == Items.BARRIER) {
-
-            world.setBlockState(pos, state.with(NOTE, 0), 3);
-            if (world.getBlockState(pos.up()).isAir()) {
-                world.addSyncedBlockEvent(pos, (NoteBlock) (Object) this, 0, 0);
-            }
-            cir.setReturnValue(ActionResult.CONSUME);
-
-        }
-
         // allows playing with right clicks while holding blaze rods
         if (player.getMainHandStack().getItem() == Items.BLAZE_ROD) {
 
@@ -99,12 +91,13 @@ public class TuneNoteBlockMixin extends Block {
 
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         ItemStack stack = new ItemStack((NoteBlock) (Object) this);
         int note = state.get(NoteBlock.NOTE);
 
-        if (note != 0) {
+        if (note != 0 && Screen.hasControlDown()) {
             NbtCompound tag = new NbtCompound();
 
             tag.putString("note", String.valueOf(note));
@@ -117,8 +110,9 @@ public class TuneNoteBlockMixin extends Block {
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        if (placer instanceof PlayerEntity && state.get(NoteBlock.NOTE) == 0)
+        if (!world.isClient && placer instanceof PlayerEntity && state.get(NoteBlock.NOTE) == 0) {
             ((PlayerEntity) placer).openHandledScreen(createScreenHandlerFactory(state, world, pos));
+        }
     }
 
     // tuning UI

@@ -18,7 +18,7 @@
 package cool.xwj.blocktuner;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.*;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
@@ -29,21 +29,29 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BlockTuner implements ModInitializer {
 
     public static final String MOD_ID = "blocktuner";
-    public static final Identifier TUNE = new Identifier(MOD_ID, "tune_screen");
-    public static final Identifier TUNE_PACKET = new Identifier(MOD_ID, "tune_packet");
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
+    public static Identifier identifier(String path) {
+        return new Identifier(MOD_ID, path);
+    }
+    public static final Identifier TUNE_SCREEN = identifier("tune_screen");
+    public static final Identifier TUNE_PACKET = identifier("tune_packet");
+
     public static final ScreenHandlerType<TuningScreenHandler> TUNING_SCREEN_HANDLER;
 
     static {
-        TUNING_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(TUNE, TuningScreenHandler::new);
+        TUNING_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(TUNE_SCREEN, TuningScreenHandler::new);
     }
 
     @Override
     public void onInitialize() {
-        System.out.println("Now Loading Block Tuner!");
+        LOGGER.info("Now Loading Block Tuner!");
 
         ServerPlayNetworking.registerGlobalReceiver(TUNE_PACKET, (server, player, handler, buf, responseSender) -> {
 

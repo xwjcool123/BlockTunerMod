@@ -351,6 +351,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                     currentDevice.getTransmitter().setReceiver(receiver);
                 } catch (MidiUnavailableException e) {
                     available = false;
+                    BlockTuner.LOGGER.info("MIDI device " + deviceName.toString() + "is currently unavailable. Is it busy or unplugged?");
                 }
             } else {
                 deviceName = new TranslatableText("midi_device.empty");
