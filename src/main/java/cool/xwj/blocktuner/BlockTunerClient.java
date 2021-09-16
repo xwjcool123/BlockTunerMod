@@ -36,9 +36,6 @@ public class BlockTunerClient implements ClientModInitializer {
     private static boolean keyToPiano = false;
     private static boolean playMode = false;
 
-    // TODO: allow player to choose whether to use BlockTuner
-    public static boolean tuningOn = true;
-
     public static final Vector<MidiDevice> transmitters = new Vector<>(0, 1);
     private static int deviceIndex = 0;
 

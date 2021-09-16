@@ -46,6 +46,8 @@ public class PlayerManagerMixin {
         } else {
             BlockTuner.validTuners.add(player);
             BlockTuner.activeTuners.add(player);
+            ((PlayerManager) (Object) this).getServer().getCommandManager().sendCommandTree(player);
+
             player.sendSystemMessage(new TranslatableText("blocktuner.enable"), Util.NIL_UUID);
         }
 

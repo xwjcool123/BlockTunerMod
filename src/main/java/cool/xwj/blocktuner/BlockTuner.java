@@ -17,8 +17,6 @@
 
 package cool.xwj.blocktuner;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.*;
@@ -30,7 +28,6 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -72,40 +69,36 @@ public class BlockTuner implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Now Loading Block Tuner!");
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("blocktuner").requires(source ->
+                source.getEntity() instanceof ServerPlayerEntity && validTuners.contains((ServerPlayerEntity) source.getEntity())).executes(context -> {
 
-            dispatcher.register(literal("blocktuner").requires(source -> source.getEntity() instanceof ServerPlayerEntity).executes(context -> {
+            ServerCommandSource source = context.getSource();
+            ServerPlayerEntity player = source.getPlayer();
 
-                ServerCommandSource source = context.getSource();
-                ServerPlayerEntity player = source.getPlayer();
-                if (validTuners.contains(player)) {
-                    if (!activeTuners.contains(player)) {
+            if (!activeTuners.contains(player)) {
 
-                        activeTuners.add(player);
-                        source.sendFeedback(new TranslatableText("blocktuner.enable"), false);
-                        return 1;
+                activeTuners.add(player);
+                source.sendFeedback(new TranslatableText("blocktuner.enable"), false);
+                return 1;
 
-                    } else {
+            } else {
 
-                        activeTuners.remove(player);
-                        source.sendFeedback(new TranslatableText("blocktuner.disable"), false);
-                        return 0;
+                activeTuners.remove(player);
+                source.sendFeedback(new TranslatableText("blocktuner.disable"), false);
+                return 0;
 
-                    }
-                } else {
-                    source.sendFeedback(new LiteralText(":("), false);
-                    return -1;
-                }
+            }
 
-            }));
-
-        });
+        })));
 
         ServerPlayNetworking.registerGlobalReceiver(CLIENT_CHECK, (server, player, handler, buf, responseSender) -> {
 
             validTuners.add(player);
             activeTuners.add(player);
-            server.execute(() -> player.sendSystemMessage(new TranslatableText("blocktuner.available"), Util.NIL_UUID));
+            server.execute(() -> {
+                server.getCommandManager().sendCommandTree(player);
+                player.sendSystemMessage(new TranslatableText("blocktuner.available"), Util.NIL_UUID);
+            });
 
         });
 
