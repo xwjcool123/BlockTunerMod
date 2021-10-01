@@ -67,7 +67,7 @@ public class BlockTuner implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Now Loading Block Tuner!");
+        LOGGER.info("[BlockTuner] Now Loading Block Tuner!");
 
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("blocktuner").requires(source ->
                 source.getEntity() instanceof ServerPlayerEntity && validTuners.contains((ServerPlayerEntity) source.getEntity())).executes(context -> {
@@ -109,7 +109,6 @@ public class BlockTuner implements ModInitializer {
             World world = player.world;
 
             server.execute(() -> {
-//                System.out.println("Tuned " + pos + " to " + note);
 
                 if (world.getBlockState(pos).getBlock() == Blocks.NOTE_BLOCK) {
 

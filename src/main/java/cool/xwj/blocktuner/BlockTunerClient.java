@@ -52,7 +52,6 @@ public class BlockTunerClient implements ClientModInitializer {
                 ClientPlayNetworking.send(BlockTuner.CLIENT_CHECK, PacketByteBufs.empty());
             }
         });
-
     }
 
     public static boolean isPlayMode() {
@@ -93,28 +92,18 @@ public class BlockTunerClient implements ClientModInitializer {
 
     private static void refreshMidiDevice(){
         MidiDevice device;
-
         transmitters.clear();
-
         transmitters.add(null);
 
         // Get a list of MIDI input device.
-
         MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
-
         for (MidiDevice.Info info : infos) {
-
             try {
                 device = MidiSystem.getMidiDevice(info);
-
                 if (device.getMaxTransmitters() != 0 && !Objects.equals(info.getVendor(), "Oracle Corporation")) {
                     transmitters.add(device);
                 }
-
             } catch (MidiUnavailableException ignored) {}
-
         }
-
     }
-
 }
