@@ -1,0 +1,9 @@
+7 lines (7 sloc)  231 Bytes
+  
+{
+  "blocktuner.enable": "BlockTuner включён",
+  "blocktuner.disable": "BlockTuner выключен",
+  "blocktuner.available": "BlockTuner доступен на этом сервере",
+  "container.tune": "Настроить и играть",
+  "midi_device.empty": "(Нет)"
+}
