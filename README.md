@@ -34,6 +34,11 @@ Top-right corner (from left to right)
 
 ### Keyboard Mapping:
 ![](https://xwj.cool/img/blocktuner/keymap.png)
+
+## Credits
+### Localization
+* Russian - [Felix14-v2](https://github.com/Felix14-v2)
+
 ## License
 
 Copyright (C) 2021, xwjcool.
