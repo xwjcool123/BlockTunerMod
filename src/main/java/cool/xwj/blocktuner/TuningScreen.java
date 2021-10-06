@@ -22,7 +22,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -116,7 +115,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     protected void drawMouseoverTooltip(MatrixStack matrices, int x, int y) {
         assert this.client != null;
         assert this.client.player != null;
-        if (/*this.client.player.getInventory().getCursorStack().isEmpty() &&*/ this.focusedSlot != null && this.focusedSlot.hasStack()) {
+        if (this.handler.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
             this.renderTooltip(matrices, this.focusedSlot.getStack(), x, y);
         } else if (midiSwitch != null && midiSwitch.isHovered()) {
             this.renderTooltip(matrices, midiSwitch.getDeviceName(), x , y);
@@ -129,7 +128,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         assert this.client != null;
         RenderSystem.setShaderTexture(0, TEXTURE);
-//        this.client.getTextureManager().bindTexture(TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
@@ -205,7 +203,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderTexture(0, TEXTURE);
-//            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -231,7 +228,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderTexture(0, TEXTURE);
-//            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -264,7 +260,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderTexture(0, TEXTURE);
-//            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -293,7 +288,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderTexture(0, TEXTURE);
-//            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -331,7 +325,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderTexture(0, TEXTURE);
-//            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
