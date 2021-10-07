@@ -22,6 +22,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -150,10 +151,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
             pressedKey = this;
             played = true;
-
-            if (pos==null) {
-                 pos = screenHandler.getSyncedPos();
-            }
 
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeByte(note);
@@ -375,7 +372,14 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     @Override
     public void tick() {
         super.tick();
-        // something may be here in the future.
+        assert client != null;
+        assert client.world != null;
+        if (pos==null) {
+            pos = screenHandler.getSyncedPos();
+        }
+        if (client.world.getBlockState(pos).getBlock() != Blocks.NOTE_BLOCK) {
+            onClose();
+        }
     }
 
     @Override
