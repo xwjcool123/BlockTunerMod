@@ -151,7 +151,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             played = true;
 
             if (pos==null) {
-                 pos = screenHandler.getSyncedPos();
+                pos = screenHandler.getSyncedPos();
             }
 
             PacketByteBuf buf = PacketByteBufs.create();

@@ -32,6 +32,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -76,11 +77,10 @@ public class TuneNoteBlockMixin extends Block {
         }
 
         // opens tuning GUI (WIP)
-//        if (player.getMainHandStack().getItem() == Items.BOOK) {
+
         if (BlockTuner.activeTuners.contains((ServerPlayerEntity) player)) {
 
             player.openHandledScreen(createScreenHandlerFactory(state, world, pos));
-
             cir.setReturnValue(ActionResult.CONSUME);
 
         }
@@ -123,7 +123,7 @@ public class TuneNoteBlockMixin extends Block {
         propertyDelegate.set(1, pos.getY());
         propertyDelegate.set(2, pos.getZ());
 
-        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TuningScreenHandler(i, playerInventory, propertyDelegate), SCREEN_TITLE);
+        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TuningScreenHandler(i, playerInventory, ScreenHandlerContext.create(world, pos), propertyDelegate), SCREEN_TITLE);
     }
 
 }
