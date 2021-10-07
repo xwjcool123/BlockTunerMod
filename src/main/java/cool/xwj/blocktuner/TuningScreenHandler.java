@@ -17,11 +17,13 @@
 
 package cool.xwj.blocktuner;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
 
@@ -29,14 +31,16 @@ public class TuningScreenHandler extends ScreenHandler {
 
     PropertyDelegate propertyDelegate;
     private BlockPos syncedPos = null;
+    private final ScreenHandlerContext context;
 
     public TuningScreenHandler(int syncId, PlayerInventory playerInventory){
-        this(syncId, playerInventory, new ArrayPropertyDelegate(3));
+        this(syncId, playerInventory, ScreenHandlerContext.EMPTY, new ArrayPropertyDelegate(3));
     }
 
-    public TuningScreenHandler(int syncId, PlayerInventory playerInventory, PropertyDelegate propertyDelegate){
+    public TuningScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, PropertyDelegate propertyDelegate){
         super(BlockTuner.TUNING_SCREEN_HANDLER, syncId);
 
+        this.context = context;
         this.propertyDelegate = propertyDelegate;
         this.addProperties(propertyDelegate);
 
@@ -54,7 +58,7 @@ public class TuningScreenHandler extends ScreenHandler {
     }
 
     public boolean canUse(PlayerEntity player) {
-        return true;
+        return canUse(this.context, player, Blocks.NOTE_BLOCK);
     }
 
     public BlockPos getSyncedPos() {
