@@ -36,7 +36,7 @@
     "fabric-networking-api-v1": "*",
     "fabric-screen-handler-api-v1": "*"
   },
-  "suggests": {
-    "another-mod": "*"
+  "conflicts": {
+    "noteduplicator": "*"
   }
 }
