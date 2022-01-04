@@ -62,7 +62,7 @@ public class BlockTuner implements ModInitializer {
     public static final ScreenHandlerType<TuningScreenHandler> TUNING_SCREEN_HANDLER;
 
     static {
-        TUNING_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(TUNE_SCREEN, TuningScreenHandler::new);
+        TUNING_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(TUNE_SCREEN, (syncId, playerInventory) -> new TuningScreenHandler(syncId));
     }
 
     @Override
@@ -124,7 +124,9 @@ public class BlockTuner implements ModInitializer {
 
                     player.swingHand(Hand.MAIN_HAND);
                 }
+
             });
+
         });
 
     }

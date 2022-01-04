@@ -35,8 +35,7 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -80,7 +79,7 @@ public class TuneNoteBlockMixin extends Block {
 
         if (BlockTuner.activeTuners.contains((ServerPlayerEntity) player)) {
 
-            player.openHandledScreen(createScreenHandlerFactory(state, world, pos));
+            player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
             cir.setReturnValue(ActionResult.CONSUME);
 
         }
@@ -107,13 +106,11 @@ public class TuneNoteBlockMixin extends Block {
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (placer instanceof ServerPlayerEntity && BlockTuner.activeTuners.contains((ServerPlayerEntity) placer) && state.get(NoteBlock.NOTE) == 0) {
-            ((PlayerEntity) placer).openHandledScreen(createScreenHandlerFactory(state, world, pos));
+            ((PlayerEntity) placer).openHandledScreen(state.createScreenHandlerFactory(world, pos));
         }
     }
 
     // tuning UI
-
-    private static final Text SCREEN_TITLE = new TranslatableText("container.tune");
 
     @Override
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
@@ -123,7 +120,7 @@ public class TuneNoteBlockMixin extends Block {
         propertyDelegate.set(1, pos.getY());
         propertyDelegate.set(2, pos.getZ());
 
-        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TuningScreenHandler(i, playerInventory, ScreenHandlerContext.create(world, pos), propertyDelegate), SCREEN_TITLE);
+        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TuningScreenHandler(i, ScreenHandlerContext.create(world, pos), propertyDelegate), LiteralText.EMPTY);
     }
 
 }

@@ -43,7 +43,8 @@ public class BlockTunerClient implements ClientModInitializer {
     public void onInitializeClient() {
         ScreenRegistry.register(BlockTuner.TUNING_SCREEN_HANDLER, TuningScreen::new);
 
-        transmitters.add(null);
+        BlockTunerConfig.load();
+        refreshMidiDevice();
 
         // Handshake with a BlockTuner server
         ClientPlayNetworking.registerGlobalReceiver(BlockTuner.CLIENT_CHECK, (client, handler, buf, responseSender) -> {
@@ -51,7 +52,9 @@ public class BlockTunerClient implements ClientModInitializer {
             if (BlockTuner.TUNING_PROTOCOL == serverProtocol) {
                 ClientPlayNetworking.send(BlockTuner.CLIENT_CHECK, PacketByteBufs.empty());
             }
+
         });
+
     }
 
     public static boolean isPlayMode() {
@@ -82,7 +85,9 @@ public class BlockTunerClient implements ClientModInitializer {
             deviceIndex += 1;
         } else {
             deviceIndex = 0;
+            BlockTunerConfig.setMidiDeviceName("");
         }
+
     }
 
     @Nullable
@@ -90,20 +95,33 @@ public class BlockTunerClient implements ClientModInitializer {
         return transmitters.get(deviceIndex);
     }
 
-    private static void refreshMidiDevice(){
+    public static void refreshMidiDevice(){
         MidiDevice device;
         transmitters.clear();
         transmitters.add(null);
+        deviceIndex = 0;
 
         // Get a list of MIDI input device.
         MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
         for (MidiDevice.Info info : infos) {
+
             try {
                 device = MidiSystem.getMidiDevice(info);
+
                 if (device.getMaxTransmitters() != 0 && !Objects.equals(info.getVendor(), "Oracle Corporation")) {
+
                     transmitters.add(device);
+
+                    if (info.getName().equals(BlockTunerConfig.getMidiDeviceName())) {
+                        deviceIndex = transmitters.size() - 1;
+                    }
+
                 }
+
             } catch (MidiUnavailableException ignored) {}
+
         }
+
     }
+
 }
