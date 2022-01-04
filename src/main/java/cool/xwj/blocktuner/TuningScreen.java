@@ -43,15 +43,20 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     private BlockPos pos = null;
     private PianoKeyWidget pressedKey = null;
     private final PianoKeyWidget[] pianoKeys = new PianoKeyWidget[25];
-    private MidiSwitch midiSwitch = null;
     private MidiDevice currentDevice;
     private final MidiReceiver receiver;
+    private boolean configChanged = false;
+    protected int backgroundWidth = 256;
+    protected int backgroundHeight = 112;
+    protected int x;
+    protected int y;
 
     static final Identifier TEXTURE = new Identifier("blocktuner", "textures/gui/container/tune.png");
 
     public TuningScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         screenHandler = (TuningScreenHandler) handler;
+
         currentDevice = BlockTunerClient.getCurrentDevice();
         receiver = new MidiReceiver();
     }
@@ -60,37 +65,41 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     protected void init() {
         super.init();
 
+        this.x = (this.width - this.backgroundWidth) / 2;
+        this.y = (this.height - this.backgroundHeight) / 2;
+
         // Fancy(?) keyboard
 
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 18, this.y + 48, 1, 3));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 28, this.y + 48, 3, 4));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 38, this.y + 48, 5, 5));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 48, this.y + 48, 6, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 58, this.y + 48, 8, 2));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 68, this.y + 48, 10, 5));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 78, this.y + 48, 11, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 88, this.y + 48, 13, 3));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 98, this.y + 48, 15, 4));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 108, this.y + 48, 17, 5));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 118, this.y + 48, 18, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 128, this.y + 48, 20, 2));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 138, this.y + 48, 22, 5));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 148, this.y + 48, 23, 1));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 12, this.y + 32, 0));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 23, this.y + 32, 2));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 34, this.y + 32, 4));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 52, this.y + 32, 7));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 64, this.y + 32, 9));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 82, this.y + 32, 12));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 93, this.y + 32, 14));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 104, this.y + 32, 16));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 122, this.y + 32, 19));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 134, this.y + 32, 21));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 152, this.y + 32, 24));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 16, this.y + 65, 1, 1));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 32, this.y + 65, 3, 1));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 48, this.y + 65, 5, 2));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 64, this.y + 65, 6, 0));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 80, this.y + 65, 8, 1));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 96, this.y + 65, 10, 2));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 112, this.y + 65, 11, 0));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 128, this.y + 65, 13, 1));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 144, this.y + 65, 15, 1));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 160, this.y + 65, 17, 2));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 176, this.y + 65, 18, 0));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 192, this.y + 65, 20, 1));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 208, this.y + 65, 22, 2));
+        this.addDrawableChild(new WhiteKeyWidget(this.x + 224, this.y + 65, 23, 0));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 8, this.y + 40, 0));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 24, this.y + 40, 2));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 40, this.y + 40, 4));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 72, this.y + 40, 7));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 88, this.y + 40, 9));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 120, this.y + 40, 12));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 136, this.y + 40, 14));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 152, this.y + 40, 16));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 184, this.y + 40, 19));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 200, this.y + 40, 21));
+        this.addDrawableChild(new BlackKeyWidget(this.x + 232, this.y + 40, 24));
 
-        this.addDrawableChild(new PlayModeToggle(this.x + 118, this.y - 16));
-        this.addDrawableChild(new KeyToPianoToggle(this.x + 136, this.y - 16));
-        midiSwitch = this.addDrawableChild(new MidiSwitch(this.x + 154, this.y - 16));
+        this.addDrawableChild(new PlayModeToggle(this.x + 184, this.y + 8));
+        this.addDrawableChild(new KeyToPianoToggle(this.x + 200, this.y + 8));
+        MidiSwitch midiSwitch = this.addDrawableChild(new MidiSwitch(this.x + 216, this.y + 8));
+        this.addDrawableChild(new MidiDeviceRefreshButton(this.x + 232, this.y + 8));
 
         if (currentDevice != null && !currentDevice.isOpen()) {
             try {
@@ -100,6 +109,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             } catch (MidiUnavailableException e) {
                 midiSwitch.available = false;
             }
+
         }
 
     }
@@ -112,16 +122,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     }
 
     @Override
-    protected void drawMouseoverTooltip(MatrixStack matrices, int x, int y) {
-        assert this.client != null;
-        assert this.client.player != null;
-        if (this.handler.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
-            this.renderTooltip(matrices, this.focusedSlot.getStack(), x, y);
-        } else if (midiSwitch != null && midiSwitch.isHovered()) {
-            this.renderTooltip(matrices, midiSwitch.getDeviceName(), x , y);
-        }
-
-    }
+    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {}
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
@@ -138,8 +139,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         private final int note;
         protected boolean played;
 
-        protected PianoKeyWidget(int x, int y, int note) {
-            super(x, y, 9, 16, LiteralText.EMPTY);
+        protected PianoKeyWidget(int x, int y, int width, int height, int note) {
+            super(x, y, width, height, LiteralText.EMPTY);
             this.note = note;
             pianoKeys[note] = this;
         }
@@ -197,7 +198,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     class BlackKeyWidget extends PianoKeyWidget{
         public BlackKeyWidget(int x, int y, int note) {
-            super(x, y, note);
+            super(x, y, 16, 38, note);
         }
 
         @Override
@@ -212,17 +213,29 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 status = 2;
             }
 
-            this.drawTexture(matrices, this.x, this.y - 10, 176 + 16 * status, 0, 9, 26);
+            this.drawTexture(matrices, this.x, this.y, 16 * status, 112, 16, 38);
         }
 
     }
 
     class WhiteKeyWidget extends PianoKeyWidget{
-        private final int keyType;
+        private final int keyShape;
 
-        public WhiteKeyWidget(int x, int y, int note, int keyType) {
-            super(x, y, note);
-            this.keyType = keyType;
+        public WhiteKeyWidget(int x, int y, int note, int keyShape) {
+            super(x, y, 16, 38, note);
+            this.keyShape = keyShape;
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            if (!this.visible) {
+                return;
+            }
+            boolean mask = mouseX >= this.x + 8 - 8 * keyShape && mouseY >= this.y && mouseX < this.x + 24 - 8 * keyShape && mouseY < this.y + 13;
+            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+            this.hovered = this.hovered && !mask;
+
+            this.renderButton(matrices, mouseX, mouseY, delta);
         }
 
         @Override
@@ -237,7 +250,12 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 status = 2;
             }
 
-            this.drawTexture(matrices, this.x, this.y - 22, 176 + 16 * status, 40 * keyType, 9, 38);
+            this.drawTexture(matrices, this.x, this.y, 16 * status + 48 * keyShape + 48, 112, 16, 38);
+        }
+
+        @Override
+        protected boolean clicked(double mouseX, double mouseY) {
+            return this.active && this.visible && this.hovered;
         }
 
     }
@@ -252,6 +270,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         }
     }
+
     static class PlayModeToggle extends ToggleWidget{
         public PlayModeToggle(int x, int y) {
             super(x, y, 16, 16, LiteralText.EMPTY);
@@ -263,14 +282,13 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
-            if (BlockTunerClient.isPlayMode()) {
-                status = 2;
-            }
             if (this.isHovered()) {
-                status += 1;
+                status = 2;
+            } else if (BlockTunerClient.isPlayMode()) {
+                status = 1;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 224, 16 * status, 16, 16);
+            this.drawTexture(matrices, this.x, this.y, 192 + 16 * status, 112, 16, 16);
         }
 
         @Override
@@ -291,14 +309,13 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
-            if (BlockTunerClient.isKeyToPiano()) {
-                status = 2;
-            }
             if (this.isHovered()) {
-                status += 1;
+                status = 2;
+            } else if (BlockTunerClient.isKeyToPiano()) {
+                status = 1;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 240, 16 * status, 16, 16);
+            this.drawTexture(matrices, this.x, this.y, 192 + 16 * status, 128, 16, 16);
         }
 
         @Override
@@ -323,26 +340,30 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            super.render(matrices, mouseX, mouseY, delta);
+            if (this.hovered) {
+                TuningScreen.this.renderTooltip(matrices, deviceName, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+            }
+        }
+
+        @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderTexture(0, TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (BlockTunerClient.getDeviceIndex() > 0) {
-                status = 2;
-                if (!available) {
-                    status = 4;
-                }
+                status = 1;
             }
             if (this.isHovered()) {
-                status += 1;
+                status = 2;
+            }
+            if (!available) {
+                status += 4;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 224, 64 + 16 * status, 16, 16);
-        }
-
-        public Text getDeviceName() {
-            return deviceName;
+            this.drawTexture(matrices, this.x, this.y, 192 + 16 * (status % 4), 144 + 16 * (status / 4), 16, 16);
         }
 
         @Override
@@ -356,7 +377,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             currentDevice = BlockTunerClient.getCurrentDevice();
 
             if (currentDevice != null) {
-                deviceName = new LiteralText(currentDevice.getDeviceInfo().getName());
+                BlockTunerConfig.setMidiDeviceName(currentDevice.getDeviceInfo().getName());
+                deviceName = new LiteralText(BlockTunerConfig.getMidiDeviceName());
                 try {
                     currentDevice.open();
                     available = true;
@@ -368,6 +390,32 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             } else {
                 deviceName = new TranslatableText("midi_device.empty");
             }
+            configChanged = true;
+        }
+
+    }
+
+    static class MidiDeviceRefreshButton extends ToggleWidget{
+        public MidiDeviceRefreshButton(int x, int y) {
+            super(x, y, 16, 16, LiteralText.EMPTY);
+        }
+
+        @Override
+        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            RenderSystem.setShaderTexture(0, TEXTURE);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+
+            int status = 0;
+            if (this.isHovered()) {
+                status = 2;
+            }
+
+            this.drawTexture(matrices, this.x, this.y, 192 + 16 * status, 176, 16, 16);
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY){
+            BlockTunerClient.refreshMidiDevice();
         }
 
     }
@@ -413,6 +461,9 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             currentDevice.close();
         }
         receiver.close();
+        if (configChanged) {
+            BlockTunerConfig.save();
+        }
         super.onClose();
     }
 
@@ -467,6 +518,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             case 50 -> 5;
             default -> -1;
         };
+
     }
 
 }
