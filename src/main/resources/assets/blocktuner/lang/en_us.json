@@ -2,6 +2,11 @@
   "blocktuner.enable": "BlockTuner enabled",
   "blocktuner.disable": "BlockTuner disabled",
   "blocktuner.available": "BlockTuner is available on this server",
-  "container.tune": "Tune & Play",
+
+  "settings.blocktuner.play_mode": "Play mode",
+  "settings.blocktuner.key_to_piano": "Typing keyboard as musical keyboard",
+  "settings.blocktuner.midi_device": "MIDI device: %s",
+  "settings.blocktuner.refresh": "Refresh MIDI device list",
+
   "midi_device.empty": "(None)"
 }

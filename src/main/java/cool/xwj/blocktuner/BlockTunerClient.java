@@ -33,9 +33,6 @@ import java.util.Vector;
 @Environment(EnvType.CLIENT)
 public class BlockTunerClient implements ClientModInitializer {
 
-    private static boolean keyToPiano = false;
-    private static boolean playMode = false;
-
     public static final Vector<MidiDevice> transmitters = new Vector<>(0, 1);
     private static int deviceIndex = 0;
 
@@ -55,22 +52,6 @@ public class BlockTunerClient implements ClientModInitializer {
 
         });
 
-    }
-
-    public static boolean isPlayMode() {
-        return playMode;
-    }
-
-    public static void togglePlayMode() {
-        playMode = !playMode;
-    }
-
-    public static boolean isKeyToPiano() {
-        return keyToPiano;
-    }
-
-    public static void toggleKeyToPiano() {
-        keyToPiano = !keyToPiano;
     }
 
     public static int getDeviceIndex() {
@@ -95,7 +76,7 @@ public class BlockTunerClient implements ClientModInitializer {
         return transmitters.get(deviceIndex);
     }
 
-    public static void refreshMidiDevice(){
+    public static void refreshMidiDevice() {
         MidiDevice device;
         transmitters.clear();
         transmitters.add(null);
@@ -124,4 +105,148 @@ public class BlockTunerClient implements ClientModInitializer {
 
     }
 
+    public static String getNoteName(int note) {
+        int keySignature = BlockTunerConfig.getKeySignature();
+        String noteName = "";
+        switch (note) {
+            case 0, 12, 24 -> {
+                if (keySignature >= -1) {
+                    noteName = "F\u266f";
+                } else if (keySignature <= -3) {
+                    noteName = "G\u266d";
+                } else {
+                    noteName = "F\u266f | G\u266d";
+                }
+            }
+            case 1, 13 -> {
+                if (keySignature >= 6) {
+                    noteName = "F\ud834\udd2a";
+                } else if (keySignature <= 4 && keySignature >= -6) {
+                    noteName = "G";
+                    if (keySignature >= 3 || keySignature <= -5) {
+                        noteName = "G\u266e";
+                    }
+                } else if (keySignature == 5){
+                    noteName = "F\ud834\udd2a | G\u266e";
+                } else {
+                    noteName = "G\u266e | A\ud834\udd2b";
+                }
+            }
+            case 2, 14 -> {
+                if (keySignature >= 1) {
+                    noteName = "G\u266f";
+                } else if (keySignature <= -1) {
+                    noteName = "A\u266d";
+                } else {
+                    noteName = "G\u266f | A\u266d";
+                }
+            }
+            case 3, 15 -> {
+                if (keySignature >= 7) {
+                    noteName = "G\ud834\udd2a | A\u266e";
+                } else if (keySignature >= -4) {
+                    noteName = "A";
+                    if (keySignature <= -3 || keySignature >= 5) {
+                        noteName = "A\u266e";
+                    }
+                } else if (keySignature <= -6) {
+                    noteName = "B\ud834\udd2b";
+                } else {
+                    noteName = "A\u266e | B\ud834\udd2b";
+                }
+            }
+            case 4, 16 -> {
+                if (keySignature >= 3) {
+                    noteName = "A\u266f";
+                } else if (keySignature <= 1) {
+                    noteName = "B\u266d";
+                } else {
+                    noteName = "A\u266f | B\u266d";
+                }
+            }
+            case 5, 17 -> {
+                if (keySignature >= -2) {
+                    noteName = "B";
+                    if (keySignature <= -1 || keySignature >= 7) {
+                        noteName = "B\u266e";
+                    }
+                } else if (keySignature <= -4) {
+                    noteName = "C\u266d";
+                } else {
+                    noteName = "B\u266e | C\u266d";
+                }
+            }
+            case 6, 18 -> {
+                if (keySignature >= 5) {
+                    noteName = "B\u266f";
+                } else if (keySignature <= 3) {
+                    noteName = "C";
+                    if (keySignature >= 2 || keySignature <= -6) {
+                        noteName = "C\u266e";
+                    }
+                } else {
+                    noteName = "B\u266f | C\u266e";
+                }
+            }
+            case 7, 19 -> {
+                if (keySignature >= 0) {
+                    noteName = "C\u266f";
+                } else if (keySignature <= -2) {
+                    noteName = "D\u266d";
+                } else {
+                    noteName = "C\u266f | D\u266d";
+                }
+            }
+            case 8, 20 -> {
+                if (keySignature >= 7) {
+                    noteName = "C\ud834\udd2a";
+                } else if (keySignature >= -5 && keySignature <= 5) {
+                    noteName = "D";
+                    if (keySignature <= -4 || keySignature >= 4) {
+                        noteName = "D\u266e";
+                    }
+                } else if (keySignature <= -7) {
+                    noteName = "E\ud834\udd2b";
+                } else if (keySignature == -6) {
+                    noteName = "C\ud834\udd2a | D\u266e";
+                } else {
+                    noteName = "D\u266e | E\ud834\udd2b";
+                }
+            }
+            case 9, 21 -> {
+                if (keySignature >= 2) {
+                    noteName = "D\u266f";
+                } else if (keySignature <= 0) {
+                    noteName = "E\u266d";
+                } else {
+                    noteName = "D\u266f | E\u266d";
+                }
+            }
+            case 10, 22 -> {
+                if (keySignature >= -3) {
+                    noteName = "E";
+                    if (keySignature <= -2 || keySignature >= 6) {
+                        noteName = "E\u266e";
+                    }
+                } else if (keySignature <= -5) {
+                    noteName = "F\u266d";
+                } else {
+                    noteName = "E\u266e | F\u266d";
+                }
+            }
+            case 11, 23 -> {
+                if (keySignature >= 4) {
+                    noteName = "E\u266f";
+                } else if (keySignature <= 2) {
+                    noteName = "F";
+                    if (keySignature >= 1 || keySignature <= -7) {
+                        noteName = "F\u266e";
+                    }
+                } else {
+                    noteName = "E\u266f | F\u266e";
+                }
+            }
+        }
+        return noteName;
+    }
 }

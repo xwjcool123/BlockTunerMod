@@ -1,7 +1,12 @@
 {
-  "blocktuner.enable": "BlockTuner\u5df2\u5f00\u542f",
-  "blocktuner.disable": "BlockTuner\u5df2\u5173\u95ed",
-  "blocktuner.available": "\u672c\u670d\u52a1\u5668\u5df2\u5b89\u88c5BlockTuner",
-  "container.tune": "\u8c03\u97f3&\u6f14\u594f",
+  "blocktuner.enable": "BlockTuner \u5df2\u5f00\u542f",
+  "blocktuner.disable": "BlockTuner \u5df2\u5173\u95ed",
+  "blocktuner.available": "\u672c\u670d\u52a1\u5668\u5df2\u5b89\u88c5 BlockTuner",
+
+  "settings.blocktuner.play_mode": "\u6f14\u594f\u6a21\u5f0f",
+  "settings.blocktuner.key_to_piano": "\u6253\u5b57\u952e\u76d8\u8f6c\u6362\u4e3a\u97f3\u4e50\u952e\u76d8",
+  "settings.blocktuner.midi_device": "MIDI \u8bbe\u5907: %s",
+  "settings.blocktuner.refresh": "\u5237\u65b0 MIDI \u8bbe\u5907\u5217\u8868",
+
   "midi_device.empty": "(\u65e0)"
 }

@@ -32,8 +32,14 @@ public class BlockTunerConfig {
     private static final Properties properties = new Properties();
 
     // configurables
+    private static final String PLAY_MODE = "play-mode";
+    private static final String KEY_TO_PIANO = "key-to-piano";
     private static final String MIDI_DEVICE = "midi-device";
+    private static final String KEY_SIGNATURE = "key-signature";
     private static String midiDeviceName = "";
+    private static boolean keyToPiano = false;
+    private static boolean playMode = false;
+    static int keySignature = 0;
 
     public static void save(){
 
@@ -51,7 +57,6 @@ public class BlockTunerConfig {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void load(){
@@ -63,19 +68,25 @@ public class BlockTunerConfig {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
 
         try (InputStream inputStream = Files.newInputStream(CONFIG_PATH)) {
             properties.load(inputStream);
 
             //
+            playMode = Boolean.parseBoolean(properties.getProperty(PLAY_MODE));
+            keyToPiano = Boolean.parseBoolean(properties.getProperty(KEY_TO_PIANO));
             midiDeviceName = properties.getProperty(MIDI_DEVICE, "");
-
+            try {
+                keySignature = Integer.parseInt(properties.getProperty(KEY_SIGNATURE));
+            } catch (NumberFormatException e) {
+                keySignature = 0;
+                properties.setProperty(KEY_SIGNATURE, keySignature + "");
+                save();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static String getMidiDeviceName() {
@@ -87,4 +98,52 @@ public class BlockTunerConfig {
         properties.setProperty(MIDI_DEVICE, midiDeviceName);
     }
 
+    public static boolean isPlayMode() {
+        return playMode;
+    }
+
+    public static void togglePlayMode() {
+        playMode = !playMode;
+        properties.setProperty(PLAY_MODE, playMode + "");
+    }
+
+    public static boolean isKeyToPiano() {
+        return keyToPiano;
+    }
+
+    public static void toggleKeyToPiano() {
+        keyToPiano = !keyToPiano;
+        properties.setProperty(KEY_TO_PIANO, keyToPiano + "");
+    }
+
+    public static int getKeySignature() {
+        return keySignature;
+    }
+
+    public static void setKeySignature(int keySignature) {
+        if (keySignature >= -7 && keySignature <= 7){
+            BlockTunerConfig.keySignature = keySignature;
+        } else {
+            BlockTunerConfig.keySignature = 0;
+        }
+        properties.setProperty(KEY_SIGNATURE, BlockTunerConfig.keySignature + "");
+    }
+
+    public static void keyAddSharp() {
+        if (keySignature < 7) {
+            keySignature += 1;
+        } else {
+            keySignature = -7;
+        }
+        properties.setProperty(KEY_SIGNATURE, keySignature + "");
+    }
+
+    public static void keyAddFlat() {
+        if (keySignature > -7) {
+            keySignature -= 1;
+        } else {
+            keySignature = 7;
+        }
+        properties.setProperty(KEY_SIGNATURE, keySignature + "");
+    }
 }

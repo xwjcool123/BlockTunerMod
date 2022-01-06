@@ -75,7 +75,7 @@ public class TuneNoteBlockMixin extends Block {
 
         }
 
-        // opens tuning GUI (WIP)
+        // opens tuning GUI
 
         if (BlockTuner.activeTuners.contains((ServerPlayerEntity) player)) {
 
@@ -92,14 +92,13 @@ public class TuneNoteBlockMixin extends Block {
         ItemStack stack = new ItemStack((NoteBlock) (Object) this);
         int note = state.get(NoteBlock.NOTE);
 
-        if (note != 0 && Screen.hasControlDown()) {
+        if (Screen.hasControlDown()) {
             NbtCompound tag = new NbtCompound();
 
-            tag.putString("note", String.valueOf(note));
+            tag.putInt("note", note);
             stack.setSubNbt("BlockStateTag", tag);
 
         }
-
         return stack;
     }
 
@@ -120,8 +119,7 @@ public class TuneNoteBlockMixin extends Block {
         propertyDelegate.set(1, pos.getY());
         propertyDelegate.set(2, pos.getZ());
 
-        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TuningScreenHandler(i, ScreenHandlerContext.create(world, pos), propertyDelegate), LiteralText.EMPTY);
+        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
+                new TuningScreenHandler(i, ScreenHandlerContext.create(world, pos), propertyDelegate), LiteralText.EMPTY);
     }
-
 }
-

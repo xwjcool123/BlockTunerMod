@@ -1,0 +1,12 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "minecraft:font/accidentals.png",
+      "ascent": 7,
+      "chars": [
+        "\ud834\udd2a\ud834\udd2b"
+      ]
+    }
+  ]
+}
