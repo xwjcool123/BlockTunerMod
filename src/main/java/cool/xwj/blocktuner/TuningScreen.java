@@ -107,7 +107,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         this.addDrawableChild(new PlayModeToggle(this.x + 184, this.y + 8));
         this.addDrawableChild(new KeyToPianoToggle(this.x + 200, this.y + 8));
-        MidiSwitch midiSwitch = this.addDrawableChild(new MidiSwitch(this.x + 216, this.y + 8));
+        this.addDrawableChild(new MidiSwitch(this.x + 216, this.y + 8));
         this.addDrawableChild(new MidiDeviceRefreshButton(this.x + 232, this.y + 8));
 
         this.addDrawable(new KeySignature(this.x + 112, this.y + 8));

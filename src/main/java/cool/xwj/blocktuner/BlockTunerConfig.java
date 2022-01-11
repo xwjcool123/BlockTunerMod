@@ -62,12 +62,7 @@ public class BlockTunerConfig {
     public static void load(){
 
         if (!Files.exists(CONFIG_PATH)) {
-            try {
-                Files.createFile(CONFIG_PATH);
-                save();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            save();
         }
 
         try (InputStream inputStream = Files.newInputStream(CONFIG_PATH)) {
@@ -78,13 +73,13 @@ public class BlockTunerConfig {
             keyToPiano = Boolean.parseBoolean(properties.getProperty(KEY_TO_PIANO));
             midiDeviceName = properties.getProperty(MIDI_DEVICE, "");
             try {
-                keySignature = Integer.parseInt(properties.getProperty(KEY_SIGNATURE));
+                keySignature = Integer.parseInt(properties.getProperty(KEY_SIGNATURE, "0"));
             } catch (NumberFormatException e) {
                 keySignature = 0;
-                properties.setProperty(KEY_SIGNATURE, keySignature + "");
+                properties.setProperty(KEY_SIGNATURE, String.valueOf(keySignature));
                 save();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -104,7 +99,7 @@ public class BlockTunerConfig {
 
     public static void togglePlayMode() {
         playMode = !playMode;
-        properties.setProperty(PLAY_MODE, playMode + "");
+        properties.setProperty(PLAY_MODE, String.valueOf(playMode));
     }
 
     public static boolean isKeyToPiano() {
@@ -113,7 +108,7 @@ public class BlockTunerConfig {
 
     public static void toggleKeyToPiano() {
         keyToPiano = !keyToPiano;
-        properties.setProperty(KEY_TO_PIANO, keyToPiano + "");
+        properties.setProperty(KEY_TO_PIANO, String.valueOf(keyToPiano));
     }
 
     public static int getKeySignature() {
@@ -126,7 +121,7 @@ public class BlockTunerConfig {
         } else {
             BlockTunerConfig.keySignature = 0;
         }
-        properties.setProperty(KEY_SIGNATURE, BlockTunerConfig.keySignature + "");
+        properties.setProperty(KEY_SIGNATURE,String.valueOf(BlockTunerConfig.keySignature));
     }
 
     public static void keyAddSharp() {
@@ -135,7 +130,7 @@ public class BlockTunerConfig {
         } else {
             keySignature = -7;
         }
-        properties.setProperty(KEY_SIGNATURE, keySignature + "");
+        properties.setProperty(KEY_SIGNATURE, String.valueOf(keySignature));
     }
 
     public static void keyAddFlat() {
@@ -144,6 +139,6 @@ public class BlockTunerConfig {
         } else {
             keySignature = 7;
         }
-        properties.setProperty(KEY_SIGNATURE, keySignature + "");
+        properties.setProperty(KEY_SIGNATURE, String.valueOf(keySignature));
     }
 }

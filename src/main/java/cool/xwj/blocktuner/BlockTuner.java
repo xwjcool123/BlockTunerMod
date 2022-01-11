@@ -55,14 +55,14 @@ public class BlockTuner implements ModInitializer {
     public static Identifier identifier(String path) {
         return new Identifier(MOD_ID, path);
     }
-    public static final Identifier TUNE_SCREEN = identifier("tune_screen");
+    public static final Identifier TUNING_SCREEN = identifier("tune_screen");
     public static final Identifier TUNE_PACKET = identifier("tune_packet");
     public static final Identifier CLIENT_CHECK = identifier("client_check");
 
     public static final ScreenHandlerType<TuningScreenHandler> TUNING_SCREEN_HANDLER;
 
     static {
-        TUNING_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(TUNE_SCREEN, (syncId, playerInventory) -> new TuningScreenHandler(syncId));
+        TUNING_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(TUNING_SCREEN, (syncId, playerInventory) -> new TuningScreenHandler(syncId));
     }
 
     @Override
