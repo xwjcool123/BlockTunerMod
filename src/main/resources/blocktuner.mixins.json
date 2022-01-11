@@ -4,11 +4,13 @@
   "package": "cool.xwj.blocktuner.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+
     "PlayerManagerMixin",
     "ServerPlayNetworkHandlerMixin",
     "TuneNoteBlockMixin"
   ],
   "client": [
+    "InGameHudMixin",
     "NoteNameMixin"
   ],
   "injectors": {
