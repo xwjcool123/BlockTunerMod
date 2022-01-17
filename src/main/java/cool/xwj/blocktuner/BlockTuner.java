@@ -76,30 +76,23 @@ public class BlockTuner implements ModInitializer {
             ServerPlayerEntity player = source.getPlayer();
 
             if (!activeTuners.contains(player)) {
-
                 activeTuners.add(player);
                 source.sendFeedback(new TranslatableText("blocktuner.enable"), false);
                 return 1;
-
             } else {
-
                 activeTuners.remove(player);
                 source.sendFeedback(new TranslatableText("blocktuner.disable"), false);
                 return 0;
-
             }
-
         })));
 
         ServerPlayNetworking.registerGlobalReceiver(CLIENT_CHECK, (server, player, handler, buf, responseSender) -> {
-
             validTuners.add(player);
             activeTuners.add(player);
             server.execute(() -> {
                 server.getCommandManager().sendCommandTree(player);
                 player.sendSystemMessage(new TranslatableText("blocktuner.available"), Util.NIL_UUID);
             });
-
         });
 
         ServerPlayNetworking.registerGlobalReceiver(TUNE_PACKET, (server, player, handler, buf, responseSender) -> {
@@ -109,26 +102,15 @@ public class BlockTuner implements ModInitializer {
             World world = player.world;
 
             server.execute(() -> {
-
                 if (world.getBlockState(pos).getBlock() == Blocks.NOTE_BLOCK) {
-
                     world.setBlockState(pos, world.getBlockState(pos).with(NoteBlock.NOTE, note), 3);
-
                     if (world.getBlockState(pos.up()).isAir()) {
-
-//                        world.addSyncedBlockEvent(pos, Blocks.NOTE_BLOCK, 0, 0);
                         ((NoteBlock) world.getBlockState(pos).getBlock()).onSyncedBlockEvent(world.getBlockState(pos), world, pos, 0, 0);
                         ((ServerWorld)world).spawnParticles(ParticleTypes.NOTE, pos.getX() + 0.5D, pos.getY() + 1.2D, pos.getZ() + 0.5D, 0, (double)note / 24.0D, 0.0D, 0.0D, 1.0D);
-
                     }
-
                     player.swingHand(Hand.MAIN_HAND);
                 }
-
             });
-
         });
-
     }
-
 }

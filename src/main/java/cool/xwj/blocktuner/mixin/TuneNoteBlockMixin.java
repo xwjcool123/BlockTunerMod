@@ -70,20 +70,13 @@ public class TuneNoteBlockMixin extends Block {
             if (world.getBlockState(pos.up()).isAir()) {
                 world.addSyncedBlockEvent(pos, (NoteBlock) (Object) this, 0, 0);
             }
-
             cir.setReturnValue(ActionResult.CONSUME);
-
         }
-
         // opens tuning GUI
-
-        if (BlockTuner.activeTuners.contains((ServerPlayerEntity) player)) {
-
+        else if (BlockTuner.activeTuners.contains((ServerPlayerEntity) player)) {
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
             cir.setReturnValue(ActionResult.CONSUME);
-
         }
-
     }
 
     @Environment(EnvType.CLIENT)

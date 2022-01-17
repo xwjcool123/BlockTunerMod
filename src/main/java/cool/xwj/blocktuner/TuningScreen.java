@@ -456,7 +456,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
     }
 
-    static class KeyAddSharpButton extends ClickableWidget {
+    class KeyAddSharpButton extends ClickableWidget {
         public KeyAddSharpButton(int x, int y) {
             super(x, y, 8, 8, LiteralText.EMPTY);
         }
@@ -476,13 +476,14 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void onClick(double mouseX, double mouseY) {
             BlockTunerConfig.keyAddSharp();
+            configChanged = true;
         }
 
         @Override
         public void appendNarrations(NarrationMessageBuilder builder) {}
     }
 
-    static class KeyAddFlatButton extends ClickableWidget{
+    class KeyAddFlatButton extends ClickableWidget{
         public KeyAddFlatButton(int x, int y) {
             super(x, y, 8, 8, LiteralText.EMPTY);
         }
@@ -502,6 +503,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void onClick(double mouseX, double mouseY) {
             BlockTunerConfig.keyAddFlat();
+            configChanged = true;
         }
 
         @Override

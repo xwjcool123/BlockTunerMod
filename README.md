@@ -20,7 +20,9 @@ You can get the latest copy [here](https://github.com/xwjcool123/BlockTunerMod/r
 
 Right clock on note blocks to open tuning GUI. Placing an untuned note block also opens tuning GUI automatically. Use command `/blocktuner` to toggle these.
 
-Ctrl + middle click on note blocks will give you readily tuned note blocks. Placing these won't open tuning GUI.
+`Ctrl` to show note name of the note block at crosshair.
+
+`Ctrl` + middle click on note blocks will give you readily tuned note blocks. Placing these won't open tuning GUI.
 
 Right click note blocks with blaze rods to play with right clicks without tuning.
 
