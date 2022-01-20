@@ -22,10 +22,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -79,40 +77,40 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         // Fancy(?) keyboard
 
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 16, this.y + 65, 1, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 32, this.y + 65, 3, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 48, this.y + 65, 5, 2));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 64, this.y + 65, 6, 0));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 80, this.y + 65, 8, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 96, this.y + 65, 10, 2));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 112, this.y + 65, 11, 0));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 128, this.y + 65, 13, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 144, this.y + 65, 15, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 160, this.y + 65, 17, 2));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 176, this.y + 65, 18, 0));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 192, this.y + 65, 20, 1));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 208, this.y + 65, 22, 2));
-        this.addDrawableChild(new WhiteKeyWidget(this.x + 224, this.y + 65, 23, 0));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 8, this.y + 40, 0));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 24, this.y + 40, 2));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 40, this.y + 40, 4));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 72, this.y + 40, 7));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 88, this.y + 40, 9));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 120, this.y + 40, 12));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 136, this.y + 40, 14));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 152, this.y + 40, 16));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 184, this.y + 40, 19));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 200, this.y + 40, 21));
-        this.addDrawableChild(new BlackKeyWidget(this.x + 232, this.y + 40, 24));
+        this.addButton(new WhiteKeyWidget(this.x + 16, this.y + 65, 1, 1));
+        this.addButton(new WhiteKeyWidget(this.x + 32, this.y + 65, 3, 1));
+        this.addButton(new WhiteKeyWidget(this.x + 48, this.y + 65, 5, 2));
+        this.addButton(new WhiteKeyWidget(this.x + 64, this.y + 65, 6, 0));
+        this.addButton(new WhiteKeyWidget(this.x + 80, this.y + 65, 8, 1));
+        this.addButton(new WhiteKeyWidget(this.x + 96, this.y + 65, 10, 2));
+        this.addButton(new WhiteKeyWidget(this.x + 112, this.y + 65, 11, 0));
+        this.addButton(new WhiteKeyWidget(this.x + 128, this.y + 65, 13, 1));
+        this.addButton(new WhiteKeyWidget(this.x + 144, this.y + 65, 15, 1));
+        this.addButton(new WhiteKeyWidget(this.x + 160, this.y + 65, 17, 2));
+        this.addButton(new WhiteKeyWidget(this.x + 176, this.y + 65, 18, 0));
+        this.addButton(new WhiteKeyWidget(this.x + 192, this.y + 65, 20, 1));
+        this.addButton(new WhiteKeyWidget(this.x + 208, this.y + 65, 22, 2));
+        this.addButton(new WhiteKeyWidget(this.x + 224, this.y + 65, 23, 0));
+        this.addButton(new BlackKeyWidget(this.x + 8, this.y + 40, 0));
+        this.addButton(new BlackKeyWidget(this.x + 24, this.y + 40, 2));
+        this.addButton(new BlackKeyWidget(this.x + 40, this.y + 40, 4));
+        this.addButton(new BlackKeyWidget(this.x + 72, this.y + 40, 7));
+        this.addButton(new BlackKeyWidget(this.x + 88, this.y + 40, 9));
+        this.addButton(new BlackKeyWidget(this.x + 120, this.y + 40, 12));
+        this.addButton(new BlackKeyWidget(this.x + 136, this.y + 40, 14));
+        this.addButton(new BlackKeyWidget(this.x + 152, this.y + 40, 16));
+        this.addButton(new BlackKeyWidget(this.x + 184, this.y + 40, 19));
+        this.addButton(new BlackKeyWidget(this.x + 200, this.y + 40, 21));
+        this.addButton(new BlackKeyWidget(this.x + 232, this.y + 40, 24));
 
-        this.addDrawableChild(new PlayModeToggle(this.x + 184, this.y + 8));
-        this.addDrawableChild(new KeyToPianoToggle(this.x + 200, this.y + 8));
-        this.addDrawableChild(new MidiSwitch(this.x + 216, this.y + 8));
-        this.addDrawableChild(new MidiDeviceRefreshButton(this.x + 232, this.y + 8));
+        this.addButton(new PlayModeToggle(this.x + 184, this.y + 8));
+        this.addButton(new KeyToPianoToggle(this.x + 200, this.y + 8));
+        this.addButton(new MidiSwitch(this.x + 216, this.y + 8));
+        this.addButton(new MidiDeviceRefreshButton(this.x + 232, this.y + 8));
 
-        this.addDrawable(new KeySignature(this.x + 112, this.y + 8));
-        this.addDrawableChild(new KeyAddSharpButton(this.x + 144, this.y + 8));
-        this.addDrawableChild(new KeyAddFlatButton(this.x + 144, this.y + 16));
+        this.addButton(new KeySignature(this.x + 112, this.y + 8));
+        this.addButton(new KeyAddSharpButton(this.x + 144, this.y + 8));
+        this.addButton(new KeyAddFlatButton(this.x + 144, this.y + 16));
 
         if (currentDevice != null && !currentDevice.isOpen()) {
             openCurrentDevice();
@@ -131,9 +129,9 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         assert this.client != null;
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
@@ -194,9 +192,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             }
             return false;
         }
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {
-        }
     }
 
     class BlackKeyWidget extends PianoKeyWidget{
@@ -206,8 +201,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (played) {
@@ -241,8 +236,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (played) {
@@ -258,7 +253,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         protected boolean clicked(double mouseX, double mouseY) {
             return this.active && this.visible && this.hovered;
         }
-
     }
 
     class PlayModeToggle extends ClickableWidget{
@@ -276,8 +270,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (BlockTunerConfig.isPlayMode()) {
@@ -294,9 +288,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             BlockTunerConfig.togglePlayMode();
             configChanged = true;
         }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
     }
 
     class KeyToPianoToggle extends ClickableWidget{
@@ -314,8 +305,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (BlockTunerConfig.isKeyToPiano()) {
@@ -332,9 +323,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             BlockTunerConfig.toggleKeyToPiano();
             configChanged = true;
         }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
     }
 
     class MidiSwitch extends ClickableWidget{
@@ -358,8 +346,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (BlockTunerClient.getDeviceIndex() > 0) {
@@ -394,9 +382,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             }
             configChanged = true;
         }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
     }
 
     class MidiDeviceRefreshButton extends ClickableWidget{
@@ -414,8 +399,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (this.isHovered()) {
@@ -431,18 +416,15 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 openCurrentDevice();
             }
         }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {
-        }
     }
 
-    static class KeySignature extends DrawableHelper implements Drawable {
+    static class KeySignature extends ClickableWidget {
 
         public int x;
         public int y;
 
         public KeySignature(int x, int y) {
+            super(x, y, 32, 16, LiteralText.EMPTY);
             this.x = x;
             this.y = y;
         }
@@ -450,10 +432,13 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             int keySignature = BlockTunerConfig.getKeySignature();
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.drawTexture(matrices, this.x, this.y, (keySignature + 8) % 8 * 32, (keySignature + 8) / 8 * 16 + 224, 32, 16);
         }
+
+        @Override
+        public void onClick(double mouseX, double mouseY){}
     }
 
     class KeyAddSharpButton extends ClickableWidget {
@@ -463,8 +448,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (this.isHovered()) {
@@ -478,20 +463,17 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             BlockTunerConfig.keyAddSharp();
             configChanged = true;
         }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
     }
 
-    class KeyAddFlatButton extends ClickableWidget{
+    class KeyAddFlatButton extends ClickableWidget {
         public KeyAddFlatButton(int x, int y) {
             super(x, y, 8, 8, LiteralText.EMPTY);
         }
 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            MinecraftClient.getInstance().getTextureManager().bindTexture(TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (this.isHovered()) {
@@ -505,9 +487,6 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             BlockTunerConfig.keyAddFlat();
             configChanged = true;
         }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
     }
 
     @Override
@@ -589,33 +568,64 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     }
 
     protected int keyToNote(int scanCode) {
-        return switch (scanCode) {
-            case 3, 38 -> 7;
-            case 4, 39 -> 9;
-            case 6 -> 12;
-            case 7 -> 14;
-            case 8 -> 16;
-            case 10 -> 19;
-            case 11 -> 21;
-            case 13 -> 24;
-            case 16, 51 -> 6;
-            case 17, 52 -> 8;
-            case 18, 53 -> 10;
-            case 19 -> 11;
-            case 20 -> 13;
-            case 21 -> 15;
-            case 22 -> 17;
-            case 23 -> 18;
-            case 24 -> 20;
-            case 25 -> 22;
-            case 26 -> 23;
-            case 34 -> 0;
-            case 35 -> 2;
-            case 36 -> 4;
-            case 48 -> 1;
-            case 49 -> 3;
-            case 50 -> 5;
-            default -> -1;
-        };
+        switch (scanCode) {
+            case 3:
+            case 38:
+                return 7;
+            case 4:
+            case 39:
+                return 9;
+            case 6:
+                return 12;
+            case 7:
+                return 14;
+            case 8:
+                return 16;
+            case 10:
+                return 19;
+            case 11:
+                return 21;
+            case 13:
+                return 24;
+            case 16:
+            case 51:
+                return 6;
+            case 17:
+            case 52:
+                return 8;
+            case 18:
+            case 53:
+                return 10;
+            case 19:
+                return 11;
+            case 20:
+                return 13;
+            case 21:
+                return 15;
+            case 22:
+                return 17;
+            case 23:
+                return 18;
+            case 24:
+                return 20;
+            case 25:
+                return 22;
+            case 26:
+                return 23;
+            case 34:
+                return 0;
+            case 35:
+                return 2;
+            case 36:
+                return 4;
+            case 48:
+                return 1;
+            case 49:
+                return 3;
+            case 50:
+                return 5;
+            default:
+                return -1;
+        }
     }
 }

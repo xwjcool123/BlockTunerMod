@@ -109,7 +109,9 @@ public class BlockTunerClient implements ClientModInitializer {
         int keySignature = BlockTunerConfig.getKeySignature();
         String noteName = "";
         switch (note) {
-            case 0, 12, 24 -> {
+            case 0:
+            case 12:
+            case 24:
                 if (keySignature >= -1) {
                     noteName = "F\u266f";
                 } else if (keySignature <= -3) {
@@ -117,8 +119,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "F\u266f | G\u266d";
                 }
-            }
-            case 1, 13 -> {
+                break;
+            case 1:
+            case 13:
                 if (keySignature >= 6) {
                     noteName = "F\ud834\udd2a";
                 } else if (keySignature <= 4 && keySignature >= -6) {
@@ -131,8 +134,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "G\u266e | A\ud834\udd2b";
                 }
-            }
-            case 2, 14 -> {
+                break;
+            case 2:
+            case 14:
                 if (keySignature >= 1) {
                     noteName = "G\u266f";
                 } else if (keySignature <= -1) {
@@ -140,8 +144,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "G\u266f | A\u266d";
                 }
-            }
-            case 3, 15 -> {
+                break;
+            case 3:
+            case 15:
                 if (keySignature >= 7) {
                     noteName = "G\ud834\udd2a | A\u266e";
                 } else if (keySignature >= -4) {
@@ -154,8 +159,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "A\u266e | B\ud834\udd2b";
                 }
-            }
-            case 4, 16 -> {
+                break;
+            case 4:
+            case 16:
                 if (keySignature >= 3) {
                     noteName = "A\u266f";
                 } else if (keySignature <= 1) {
@@ -163,8 +169,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "A\u266f | B\u266d";
                 }
-            }
-            case 5, 17 -> {
+                break;
+            case 5:
+            case 17:
                 if (keySignature >= -2) {
                     noteName = "B";
                     if (keySignature <= -1 || keySignature >= 7) {
@@ -175,8 +182,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "B\u266e | C\u266d";
                 }
-            }
-            case 6, 18 -> {
+                break;
+            case 6:
+            case 18:
                 if (keySignature >= 5) {
                     noteName = "B\u266f";
                 } else if (keySignature <= 3) {
@@ -187,8 +195,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "B\u266f | C\u266e";
                 }
-            }
-            case 7, 19 -> {
+                break;
+            case 7:
+            case 19:
                 if (keySignature >= 0) {
                     noteName = "C\u266f";
                 } else if (keySignature <= -2) {
@@ -196,8 +205,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "C\u266f | D\u266d";
                 }
-            }
-            case 8, 20 -> {
+                break;
+            case 8:
+            case 20:
                 if (keySignature >= 7) {
                     noteName = "C\ud834\udd2a";
                 } else if (keySignature >= -5 && keySignature <= 5) {
@@ -212,8 +222,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "D\u266e | E\ud834\udd2b";
                 }
-            }
-            case 9, 21 -> {
+                break;
+            case 9:
+            case 21:
                 if (keySignature >= 2) {
                     noteName = "D\u266f";
                 } else if (keySignature <= 0) {
@@ -221,8 +232,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "D\u266f | E\u266d";
                 }
-            }
-            case 10, 22 -> {
+                break;
+            case 10:
+            case 22:
                 if (keySignature >= -3) {
                     noteName = "E";
                     if (keySignature <= -2 || keySignature >= 6) {
@@ -233,8 +245,9 @@ public class BlockTunerClient implements ClientModInitializer {
                 } else {
                     noteName = "E\u266e | F\u266d";
                 }
-            }
-            case 11, 23 -> {
+                break;
+            case 11:
+            case 23:
                 if (keySignature >= 4) {
                     noteName = "E\u266f";
                 } else if (keySignature <= 2) {
@@ -246,7 +259,6 @@ public class BlockTunerClient implements ClientModInitializer {
                     noteName = "E\u266f | F\u266e";
                 }
             }
-        }
         return noteName;
     }
 }

@@ -41,6 +41,6 @@ public class InGameHudMixin extends DrawableHelper {
     @Inject(method = "render", at = @At("TAIL"))
     private void renderNoteNameHud(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         this.noteNameHud.render(matrices);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

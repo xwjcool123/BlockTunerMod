@@ -39,7 +39,7 @@ public class NoteNameMixin {
     private void getNoteName(CallbackInfoReturnable<Text> cir){
         if (((ItemStack)(Object)this).getItem() == Items.NOTE_BLOCK) {
 
-            NbtCompound nbtCompound = ((ItemStack)(Object)this).getSubNbt(BLOCK_STATE_KEY);
+            NbtCompound nbtCompound = ((ItemStack)(Object)this).getSubTag(BLOCK_STATE_KEY);
             int note = 0;
 
             if (nbtCompound != null && nbtCompound.contains(NOTE_KEY, 3)) {

@@ -32,7 +32,7 @@
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": "1.18.x",
+    "minecraft": "1.16.5",
     "fabric-networking-api-v1": "*",
     "fabric-screen-handler-api-v1": "*"
   },

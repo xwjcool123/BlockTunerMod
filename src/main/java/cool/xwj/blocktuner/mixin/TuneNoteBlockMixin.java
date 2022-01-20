@@ -89,7 +89,7 @@ public class TuneNoteBlockMixin extends Block {
             NbtCompound tag = new NbtCompound();
 
             tag.putInt("note", note);
-            stack.setSubNbt("BlockStateTag", tag);
+            stack.putSubTag("BlockStateTag", tag);
 
         }
         return stack;
