@@ -12,7 +12,7 @@ jobs:
       matrix:
         # Use these Java versions
         java: [
-          1.8,   # Minimum support
+          1.8   # Minimum support
           17    # Latest version & Current Java LTS
         ]
         # and run on both Linux and Windows
