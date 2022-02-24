@@ -1,0 +1,12 @@
+{
+  "blocktuner.enable": "BlockTuner オン",
+  "blocktuner.disable": "BlockTuner オフ",
+  "blocktuner.available": "このサーバーにはBlockTunerがインストールされています",
+
+  "settings.blocktuner.play_mode": "プレイモード",
+  "settings.blocktuner.key_to_piano": "キーボードを音楽キーボードとして入力する",
+  "settings.blocktuner.midi_device": "MIDIデバイス：%s",
+  "settings.blocktuner.refresh": "MIDIデバイスリストを更新する",
+
+  "midi_device.empty": "(無し)"
+}
