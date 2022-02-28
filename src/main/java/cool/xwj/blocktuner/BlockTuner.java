@@ -67,7 +67,7 @@ public class BlockTuner implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("[BlockTuner] Now Loading Block Tuner!");
+        LOGGER.info("[BlockTuner] Now Loading BlockTuner!");
 
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("blocktuner").requires(source ->
                 source.getEntity() instanceof ServerPlayerEntity && validTuners.contains((ServerPlayerEntity) source.getEntity())).executes(context -> {
