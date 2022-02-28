@@ -151,6 +151,14 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            super.render(matrices, mouseX, mouseY, delta);
+            if (this.hovered) {
+                TuningScreen.this.renderTooltip(matrices, new LiteralText(BlockTunerClient.getNoteName(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+            }
+        }
+
+        @Override
         public void onClick(double mouseX, double mouseY){
 
             pressedKey = this;
@@ -171,7 +179,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             client.player.swingHand(Hand.MAIN_HAND);
 
             if (!BlockTunerConfig.isPlayMode()){
-                onClose();
+                close();
             }
         }
 
@@ -229,6 +237,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            super.render(matrices, mouseX, mouseY, delta);
             if (!this.visible) {
                 return;
             }
@@ -544,7 +553,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         return super.keyReleased(keyCode, scanCode, modifiers);
     }
 
-    public void onClose() {
+    public void close() {
         if (currentDevice != null && currentDevice.isOpen()) {
             currentDevice.close();
         }
@@ -552,7 +561,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         if (configChanged) {
             BlockTunerConfig.save();
         }
-        super.onClose();
+        super.close();
     }
 
     class MidiReceiver implements Receiver {
@@ -588,7 +597,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
     }
 
-    protected int keyToNote(int scanCode) {
+    protected static int keyToNote(int scanCode) {
         return switch (scanCode) {
             case 3, 38 -> 7;
             case 4, 39 -> 9;
