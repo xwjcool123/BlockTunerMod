@@ -1,0 +1,12 @@
+{
+  "blocktuner.enable": "ilo pi leko kalama li lon",
+  "blocktuner.disable": "ilo pi leko kalama li lon ala",
+  "blocktuner.available": "ma kulupu ni la ilo pi leko kalama li lon",
+
+  "settings.blocktuner.play_mode": "nasin musi",
+  "settings.blocktuner.key_to_piano": "ilo nena kama sama li ilo pi kalama musi",
+  "settings.blocktuner.midi_device": "ilo pi kalama musi: %s",
+  "settings.blocktuner.refresh": "ilo pi kalama musi li o sin",
+
+  "midi_device.empty": "(ala)"
+}
