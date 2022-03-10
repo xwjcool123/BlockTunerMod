@@ -3,7 +3,7 @@
   "blocktuner.disable": "BlockTuner オフ",
   "blocktuner.available": "このサーバーにはBlockTunerがインストールされています",
 
-  "settings.blocktuner.play_mode": "プレイモード",
+  "settings.blocktuner.play_mode": "演奏モード",
   "settings.blocktuner.key_to_piano": "キーボードを音楽キーボードとして入力する",
   "settings.blocktuner.midi_device": "MIDIデバイス：%s",
   "settings.blocktuner.refresh": "MIDIデバイスリストを更新する",
