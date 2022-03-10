@@ -39,7 +39,8 @@ Top-right corner (from left to right)
 
 ## Credits
 ### Localization
-* Russian - [Felix14-v2](https://github.com/Felix14-v2)
+* Russian - [Felix14-v2](https://github.com/Felix14-v2) (Currently outdated)
+* Japanese - [misaka10843](https://github.com/misaka10843) & [hakkaku](https://note.com/hakukak/)
 
 ## License
 
