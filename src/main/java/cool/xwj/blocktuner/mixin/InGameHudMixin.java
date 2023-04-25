@@ -22,6 +22,7 @@ import cool.xwj.blocktuner.NoteNameHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +35,7 @@ public class InGameHudMixin extends DrawableHelper {
     private NoteNameHud noteNameHud;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void newNoteNameHud(MinecraftClient client, CallbackInfo ci) {
+    private void newNoteNameHud(MinecraftClient client, ItemRenderer renderer, CallbackInfo ci) {
         noteNameHud = new NoteNameHud(client);
     }
 

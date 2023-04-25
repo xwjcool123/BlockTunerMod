@@ -20,9 +20,14 @@ package cool.xwj.blocktuner;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.*;
@@ -35,22 +40,34 @@ public class BlockTunerClient implements ClientModInitializer {
 
     public static final Vector<MidiDevice> transmitters = new Vector<>(0, 1);
     private static int deviceIndex = 0;
+    private boolean blockTunerServer = false;
 
     @Override
     public void onInitializeClient() {
-        ScreenRegistry.register(BlockTuner.TUNING_SCREEN_HANDLER, TuningScreen::new);
-
         BlockTunerConfig.load();
         refreshMidiDevice();
 
-        // Handshake with a BlockTuner server
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if(blockTunerServer
+                    && world.getBlockState(hitResult.getBlockPos()).getBlock() == Blocks.NOTE_BLOCK
+                    && !player.isSpectator()
+                    && player.getMainHandStack().getItem() != Items.BLAZE_ROD) {
+                MinecraftClient.getInstance().setScreen(new TuningScreen(Text.empty(), hitResult.getBlockPos()));
+                return ActionResult.FAIL;
+            }
+            return ActionResult.PASS;
+        });
+
+        // knowing a BlockTuner server
         ClientPlayNetworking.registerGlobalReceiver(BlockTuner.CLIENT_CHECK, (client, handler, buf, responseSender) -> {
             int serverProtocol = buf.readInt();
             if (BlockTuner.TUNING_PROTOCOL == serverProtocol) {
-                ClientPlayNetworking.send(BlockTuner.CLIENT_CHECK, PacketByteBufs.empty());
+                MinecraftClient.getInstance().execute(() -> blockTunerServer = true);
             }
 
         });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> blockTunerServer = false);
 
     }
 

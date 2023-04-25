@@ -48,8 +48,8 @@ public class NoteNameMixin {
                     note = 0;
                 }
             }
-            cir.setReturnValue(new TranslatableText(((ItemStack)(Object)this).getTranslationKey())
-                    .append(Texts.setStyleIfAbsent(new LiteralText(" (" + BlockTunerClient.getNoteName(note) + ", "+ note + ")"), NOTE_STYLE)));
+            cir.setReturnValue(MutableText.of(new TranslatableTextContent(((ItemStack)(Object)this).getTranslationKey(), null, null))
+                    .append(MutableText.of(new LiteralTextContent(" (" + BlockTunerClient.getNoteName(note) + ", "+ note + ")")).setStyle(NOTE_STYLE)));
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- *     Copyright (c) 2021, xwjcool.
+ *     Copyright (c) 2021-2023, xwjcool.
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,6 @@
 package cool.xwj.blocktuner.mixin;
 
 import cool.xwj.blocktuner.BlockTuner;
-import cool.xwj.blocktuner.TuningScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -35,7 +34,8 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.LiteralTextContent;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -49,9 +49,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(NoteBlock.class)
-public class TuneNoteBlockMixin extends Block {
+public class NoteBlockMixin extends Block {
 
-    public TuneNoteBlockMixin(Settings settings) {
+    public NoteBlockMixin(Settings settings) {
         super(settings);
     }
 
@@ -72,11 +72,6 @@ public class TuneNoteBlockMixin extends Block {
             }
             cir.setReturnValue(ActionResult.CONSUME);
         }
-        // opens tuning GUI
-        else if (BlockTuner.activeTuners.contains((ServerPlayerEntity) player)) {
-            player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
-            cir.setReturnValue(ActionResult.CONSUME);
-        }
     }
 
     @Environment(EnvType.CLIENT)
@@ -93,26 +88,5 @@ public class TuneNoteBlockMixin extends Block {
 
         }
         return stack;
-    }
-
-    @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        if (placer instanceof ServerPlayerEntity && BlockTuner.activeTuners.contains((ServerPlayerEntity) placer) && state.get(NoteBlock.NOTE) == 0) {
-            ((PlayerEntity) placer).openHandledScreen(state.createScreenHandlerFactory(world, pos));
-        }
-    }
-
-    // tuning UI
-
-    @Override
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-
-        ArrayPropertyDelegate propertyDelegate = new ArrayPropertyDelegate(3);
-        propertyDelegate.set(0, pos.getX());
-        propertyDelegate.set(1, pos.getY());
-        propertyDelegate.set(2, pos.getZ());
-
-        return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
-                new TuningScreenHandler(i, ScreenHandlerContext.create(world, pos), propertyDelegate), LiteralText.EMPTY);
     }
 }

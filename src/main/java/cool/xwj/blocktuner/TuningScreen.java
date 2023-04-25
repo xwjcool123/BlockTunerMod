@@ -20,29 +20,24 @@ package cool.xwj.blocktuner;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import javax.sound.midi.*;
 
-public class TuningScreen extends HandledScreen<ScreenHandler> {
+@Environment(EnvType.CLIENT)
+public class TuningScreen extends Screen {
 
-    TuningScreenHandler screenHandler;
-    private BlockPos pos = null;
+    private final BlockPos pos;
+    private final String commandPrefix;
     private PianoKeyWidget pressedKey = null;
     private final PianoKeyWidget[] pianoKeys = new PianoKeyWidget[25];
     private MidiDevice currentDevice;
@@ -54,17 +49,18 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     protected int backgroundHeight = 112;
     protected int x;
     protected int y;
-    protected static final TranslatableText PLAY_MODE_TOGGLE_TOOLTIP = new TranslatableText("settings.blocktuner.play_mode");
-    protected static final TranslatableText KEY_TO_PIANO_TOGGLE_TOOLTIP = new TranslatableText("settings.blocktuner.key_to_piano");
-    protected static final TranslatableText EMPTY_MIDI_DEVICE = new TranslatableText("midi_device.empty");
-    protected static final TranslatableText MIDI_DEVICE_REFRESH_TOOLTIP = new TranslatableText("settings.blocktuner.refresh");
+    protected static final Text PLAY_MODE_TOGGLE_TOOLTIP = Text.translatable("settings.blocktuner.play_mode");
+    protected static final Text KEY_TO_PIANO_TOGGLE_TOOLTIP =Text.translatable("settings.blocktuner.key_to_piano");
+    protected static final Text EMPTY_MIDI_DEVICE = Text.translatable("midi_device.empty");
+    protected static final Text MIDI_DEVICE_REFRESH_TOOLTIP = Text.translatable("settings.blocktuner.refresh");
 
 
     static final Identifier TEXTURE = new Identifier("blocktuner", "textures/gui/container/tune.png");
 
-    public TuningScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
-        screenHandler = (TuningScreenHandler) handler;
+    public TuningScreen(Text title, BlockPos pos) {
+        super(title);
+        this.pos = pos;
+        this.commandPrefix = "tune " + pos.getX() + ' ' + pos.getY() + ' ' + pos.getZ() + ' ';
 
         currentDevice = BlockTunerClient.getCurrentDevice();
         receiver = new MidiReceiver();
@@ -122,30 +118,37 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
+        this.drawBackground(matrices, delta, mouseX, mouseY);
         super.render(matrices, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(matrices, mouseX, mouseY);
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {}
+    public void tick() {
+        if (client == null || client.world == null || client.world.getBlockState(pos).getBlock() != Blocks.NOTE_BLOCK) {
+            this.close();
+        }
+    }
 
-    @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         assert this.client != null;
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
-    @Environment(EnvType.CLIENT)
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
+
     abstract class PianoKeyWidget extends ClickableWidget {
         private final int note;
         protected boolean played;
 
         protected PianoKeyWidget(int x, int y, int width, int height, int note) {
-            super(x, y, width, height, LiteralText.EMPTY);
+            super(x, y, width, height, Text.empty());
             this.note = note;
             pianoKeys[note] = this;
         }
@@ -154,7 +157,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             super.render(matrices, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, new LiteralText(BlockTunerClient.getNoteName(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                TuningScreen.this.renderTooltip(matrices, Text.literal(BlockTunerClient.getNoteName(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
@@ -164,19 +167,10 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             pressedKey = this;
             played = true;
 
-            if (pos==null) {
-                pos = screenHandler.getSyncedPos();
+            if (client != null && client.player != null && client.getNetworkHandler() != null) {
+                client.getNetworkHandler().sendChatCommand(commandPrefix + note);
+                client.player.swingHand(Hand.MAIN_HAND);
             }
-
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeByte(note);
-            buf.writeBlockPos(pos);
-
-            ClientPlayNetworking.send(BlockTuner.TUNE_PACKET, buf);
-
-            assert client != null;
-            assert client.player != null;
-            client.player.swingHand(Hand.MAIN_HAND);
 
             if (!BlockTunerConfig.isPlayMode()){
                 close();
@@ -203,7 +197,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             return false;
         }
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {
+        public void appendClickableNarrations(NarrationMessageBuilder builder) {
         }
     }
 
@@ -223,7 +217,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             } else if (this.isHovered()) {
                 status = 2;
             }
-            this.drawTexture(matrices, this.x, this.y, 16 * status, 112, 16, 38);
+            drawTexture(matrices, this.getX(), this.getY(), 16 * status, 112, 16, 38);
         }
     }
 
@@ -241,8 +235,8 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             if (!this.visible) {
                 return;
             }
-            boolean mask = mouseX >= this.x + 8 - 8 * keyShape && mouseY >= this.y && mouseX < this.x + 24 - 8 * keyShape && mouseY < this.y + 13;
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+            boolean mask = mouseX >= this.getX() + 8 - 8 * keyShape && mouseY >= this.getY() && mouseX < this.getX() + 24 - 8 * keyShape && mouseY < this.getY() + 13;
+            this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
             this.hovered = this.hovered && !mask;
 
             this.renderButton(matrices, mouseX, mouseY, delta);
@@ -260,7 +254,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
                 status = 2;
             }
 
-            this.drawTexture(matrices, this.x, this.y, 16 * status + 48 * keyShape + 48, 112, 16, 38);
+            drawTexture(matrices, this.getX(), this.getY(), 16 * status + 48 * keyShape + 48, 112, 16, 38);
         }
 
         @Override
@@ -272,7 +266,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
     class PlayModeToggle extends ClickableWidget{
         public PlayModeToggle(int x, int y) {
-            super(x, y, 16, 16, LiteralText.EMPTY);
+            super(x, y, 16, 16, Text.empty());
         }
 
         @Override
@@ -295,7 +289,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             if (this.isHovered()) {
                 status += 1;
             }
-            this.drawTexture(matrices, this.x, this.y, 192 + 16 * status, 112, 16, 16);
+            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * status, 112, 16, 16);
         }
 
         @Override
@@ -305,12 +299,12 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
+        public void appendClickableNarrations(NarrationMessageBuilder builder) {}
     }
 
     class KeyToPianoToggle extends ClickableWidget{
         public KeyToPianoToggle(int x, int y) {
-            super(x, y, 16, 16, LiteralText.EMPTY);
+            super(x, y, 16, 16, Text.empty());
         }
 
         @Override
@@ -333,7 +327,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             if (this.isHovered()) {
                 status += 1;
             }
-            this.drawTexture(matrices, this.x, this.y, 192 + 16 * status, 128, 16, 16);
+            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * status, 128, 16, 16);
         }
 
         @Override
@@ -343,17 +337,17 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
+        public void appendClickableNarrations(NarrationMessageBuilder builder) {}
     }
 
     class MidiSwitch extends ClickableWidget{
 
         public MidiSwitch(int x, int y) {
-            super(x, y, 16, 16, LiteralText.EMPTY);
+            super(x, y, 16, 16, Text.empty());
             if (currentDevice == null) {
                 deviceName = EMPTY_MIDI_DEVICE;
             } else {
-                deviceName = new LiteralText(currentDevice.getDeviceInfo().getName());
+                deviceName = Text.literal(currentDevice.getDeviceInfo().getName());
             }
         }
 
@@ -361,7 +355,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             super.render(matrices, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, new TranslatableText("settings.blocktuner.midi_device", deviceName), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                TuningScreen.this.renderTooltip(matrices, Text.translatable("settings.blocktuner.midi_device", deviceName), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
@@ -380,7 +374,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             if (!deviceAvailable) {
                 status += 4;
             }
-            this.drawTexture(matrices, this.x, this.y, 192 + 16 * (status % 4), 144 + 16 * (status / 4), 16, 16);
+            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * (status % 4), 144 + 16 * (status / 4), 16, 16);
         }
 
         @Override
@@ -395,7 +389,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
 
             if (currentDevice != null) {
                 BlockTunerConfig.setMidiDeviceName(currentDevice.getDeviceInfo().getName());
-                deviceName = new LiteralText(BlockTunerConfig.getMidiDeviceName());
+                deviceName = Text.literal(BlockTunerConfig.getMidiDeviceName());
                 openCurrentDevice();
             } else {
                 BlockTunerConfig.setMidiDeviceName("");
@@ -405,12 +399,12 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
+        public void appendClickableNarrations(NarrationMessageBuilder builder) {}
     }
 
     class MidiDeviceRefreshButton extends ClickableWidget{
         public MidiDeviceRefreshButton(int x, int y) {
-            super(x, y, 16, 16, LiteralText.EMPTY);
+            super(x, y, 16, 16, Text.empty());
         }
 
         @Override
@@ -430,7 +424,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             if (this.isHovered()) {
                 status += 1;
             }
-            this.drawTexture(matrices, this.x, this.y, 192 + 16 * status, 176, 16, 16);
+            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * status, 176, 16, 16);
         }
 
         @Override
@@ -442,7 +436,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {
+        public void appendClickableNarrations(NarrationMessageBuilder builder) {
         }
     }
 
@@ -461,13 +455,13 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             int keySignature = BlockTunerConfig.getKeySignature();
             RenderSystem.setShaderTexture(0, TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            this.drawTexture(matrices, this.x, this.y, (keySignature + 8) % 8 * 32, (keySignature + 8) / 8 * 16 + 224, 32, 16);
+            drawTexture(matrices, this.x, this.y, (keySignature + 8) % 8 * 32, (keySignature + 8) / 8 * 16 + 224, 32, 16);
         }
     }
 
     class KeyAddSharpButton extends ClickableWidget {
         public KeyAddSharpButton(int x, int y) {
-            super(x, y, 8, 8, LiteralText.EMPTY);
+            super(x, y, 8, 8, Text.empty());
         }
 
         @Override
@@ -479,7 +473,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             if (this.isHovered()) {
                 status += 1;
             }
-            this.drawTexture(matrices, this.x, this.y, 8 * status, 152, 8, 8);
+            drawTexture(matrices, this.getX(), this.getY(), 8 * status, 152, 8, 8);
         }
 
         @Override
@@ -489,12 +483,12 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
+        public void appendClickableNarrations(NarrationMessageBuilder builder) {}
     }
 
     class KeyAddFlatButton extends ClickableWidget{
         public KeyAddFlatButton(int x, int y) {
-            super(x, y, 8, 8, LiteralText.EMPTY);
+            super(x, y, 8, 8, Text.empty());
         }
 
         @Override
@@ -506,7 +500,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             if (this.isHovered()) {
                 status += 1;
             }
-            this.drawTexture(matrices, this.x, this.y, 8 * status + 16, 152, 8, 8);
+            drawTexture(matrices, this.getX(), this.getY(), 8 * status + 16, 152, 8, 8);
         }
 
         @Override
@@ -516,7 +510,7 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder) {}
+        public void appendClickableNarrations(NarrationMessageBuilder builder) {}
     }
 
     @Override
@@ -540,6 +534,10 @@ public class TuningScreen extends HandledScreen<ScreenHandler> {
             }
             return true;
         } else {
+            if (keyCode == 69) {
+                this.close();
+                return true;
+            }
             return super.keyPressed(keyCode, scanCode, modifiers);
         }
     }
