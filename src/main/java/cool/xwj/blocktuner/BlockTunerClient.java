@@ -49,6 +49,7 @@ public class BlockTunerClient implements ClientModInitializer {
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if(blockTunerServer
+                    && !player.isSneaking()
                     && world.getBlockState(hitResult.getBlockPos()).getBlock() == Blocks.NOTE_BLOCK
                     && !player.isSpectator()
                     && player.getMainHandStack().getItem() != Items.BLAZE_ROD) {
