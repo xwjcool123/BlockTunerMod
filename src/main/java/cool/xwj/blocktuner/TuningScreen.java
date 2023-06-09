@@ -21,12 +21,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -116,10 +115,10 @@ public class TuningScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        this.drawBackground(matrices, delta, mouseX, mouseY);
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        this.drawBackground(context, delta, mouseX, mouseY);
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
@@ -129,13 +128,12 @@ public class TuningScreen extends Screen {
         }
     }
 
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         assert this.client != null;
-        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        context.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
@@ -154,10 +152,10 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            super.render(context, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, Text.literal(BlockTunerClient.getNoteName(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                context.drawTooltip(TuningScreen.this.textRenderer, Text.literal(BlockTunerClient.getNoteName(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
@@ -207,8 +205,7 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -217,7 +214,7 @@ public class TuningScreen extends Screen {
             } else if (this.isHovered()) {
                 status = 2;
             }
-            drawTexture(matrices, this.getX(), this.getY(), 16 * status, 112, 16, 38);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 16 * status, 112, 16, 38);
         }
     }
 
@@ -230,8 +227,8 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            super.render(context, mouseX, mouseY, delta);
             if (!this.visible) {
                 return;
             }
@@ -239,12 +236,11 @@ public class TuningScreen extends Screen {
             this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
             this.hovered = this.hovered && !mask;
 
-            this.renderButton(matrices, mouseX, mouseY, delta);
+            this.renderButton(context, mouseX, mouseY, delta);
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -254,7 +250,7 @@ public class TuningScreen extends Screen {
                 status = 2;
             }
 
-            drawTexture(matrices, this.getX(), this.getY(), 16 * status + 48 * keyShape + 48, 112, 16, 38);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 16 * status + 48 * keyShape + 48, 112, 16, 38);
         }
 
         @Override
@@ -270,16 +266,15 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            super.render(context, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, PLAY_MODE_TOGGLE_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                context.drawTooltip(TuningScreen.this.textRenderer, PLAY_MODE_TOGGLE_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -289,7 +284,7 @@ public class TuningScreen extends Screen {
             if (this.isHovered()) {
                 status += 1;
             }
-            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * status, 112, 16, 16);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 192 + 16 * status, 112, 16, 16);
         }
 
         @Override
@@ -308,16 +303,15 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            super.render(context, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, KEY_TO_PIANO_TOGGLE_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                context.drawTooltip(TuningScreen.this.textRenderer, KEY_TO_PIANO_TOGGLE_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -327,7 +321,7 @@ public class TuningScreen extends Screen {
             if (this.isHovered()) {
                 status += 1;
             }
-            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * status, 128, 16, 16);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 192 + 16 * status, 128, 16, 16);
         }
 
         @Override
@@ -352,16 +346,15 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            super.render(context, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, Text.translatable("settings.blocktuner.midi_device", deviceName), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                context.drawTooltip(TuningScreen.this.textRenderer, Text.translatable("settings.blocktuner.midi_device", deviceName), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -374,7 +367,7 @@ public class TuningScreen extends Screen {
             if (!deviceAvailable) {
                 status += 4;
             }
-            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * (status % 4), 144 + 16 * (status / 4), 16, 16);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 192 + 16 * (status % 4), 144 + 16 * (status / 4), 16, 16);
         }
 
         @Override
@@ -408,23 +401,22 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            super.render(matrices, mouseX, mouseY, delta);
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            super.render(context, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, MIDI_DEVICE_REFRESH_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                context.drawTooltip(TuningScreen.this.textRenderer, MIDI_DEVICE_REFRESH_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (this.isHovered()) {
                 status += 1;
             }
-            drawTexture(matrices, this.getX(), this.getY(), 192 + 16 * status, 176, 16, 16);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 192 + 16 * status, 176, 16, 16);
         }
 
         @Override
@@ -440,7 +432,7 @@ public class TuningScreen extends Screen {
         }
     }
 
-    static class KeySignature extends DrawableHelper implements Drawable {
+    static class KeySignature implements Drawable {
 
         public int x;
         public int y;
@@ -451,11 +443,10 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
             int keySignature = BlockTunerConfig.getKeySignature();
-            RenderSystem.setShaderTexture(0, TEXTURE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            drawTexture(matrices, this.x, this.y, (keySignature + 8) % 8 * 32, (keySignature + 8) / 8 * 16 + 224, 32, 16);
+            context.drawTexture(TEXTURE, this.x, this.y, (keySignature + 8) % 8 * 32, (keySignature + 8) / 8 * 16 + 224, 32, 16);
         }
     }
 
@@ -465,15 +456,14 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (this.isHovered()) {
                 status += 1;
             }
-            drawTexture(matrices, this.getX(), this.getY(), 8 * status, 152, 8, 8);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 8 * status, 152, 8, 8);
         }
 
         @Override
@@ -492,15 +482,14 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderTexture(0, TEXTURE);
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
             if (this.isHovered()) {
                 status += 1;
             }
-            drawTexture(matrices, this.getX(), this.getY(), 8 * status + 16, 152, 8, 8);
+            context.drawTexture(TEXTURE, this.getX(), this.getY(), 8 * status + 16, 152, 8, 8);
         }
 
         @Override

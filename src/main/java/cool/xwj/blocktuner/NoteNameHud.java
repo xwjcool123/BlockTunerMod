@@ -22,14 +22,13 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 
-public class NoteNameHud extends DrawableHelper {
+public class NoteNameHud {
 
     private final MinecraftClient client;
     private final TextRenderer textRenderer;
@@ -39,7 +38,7 @@ public class NoteNameHud extends DrawableHelper {
         this.textRenderer = client.textRenderer;
     }
 
-    public void render(MatrixStack matrices) {
+    public void render(DrawContext context) {
         assert this.client.world != null;
         assert this.client.player != null;
         if(Screen.hasControlDown() && !this.client.player.isSpectator()) {
@@ -51,7 +50,7 @@ public class NoteNameHud extends DrawableHelper {
                     int note = state.get(NoteBlock.NOTE);
                     int x = this.client.getWindow().getScaledWidth() / 2 + 4;
                     int y = this.client.getWindow().getScaledHeight() / 2 + 4;
-                    this.textRenderer.drawWithShadow(matrices, BlockTunerClient.getNoteName(note) + ", " + note, x, y, 0x55FFFF);
+                    context.drawText(this.textRenderer, BlockTunerClient.getNoteName(note) + ", " + note, x, y, 0x55FFFF, true);
                 }
             }
         }

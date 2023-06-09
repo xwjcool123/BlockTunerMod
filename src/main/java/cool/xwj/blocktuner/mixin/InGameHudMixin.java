@@ -20,17 +20,16 @@ package cool.xwj.blocktuner.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import cool.xwj.blocktuner.NoteNameHud;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin extends DrawableHelper {
+public class InGameHudMixin {
 
     private NoteNameHud noteNameHud;
 
@@ -40,8 +39,8 @@ public class InGameHudMixin extends DrawableHelper {
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void renderNoteNameHud(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
-        this.noteNameHud.render(matrices);
+    private void renderNoteNameHud(DrawContext context, float tickDelta, CallbackInfo ci) {
+        this.noteNameHud.render(context);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }
