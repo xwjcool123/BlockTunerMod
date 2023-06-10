@@ -18,7 +18,7 @@ You can get the latest version [here](https://github.com/xwjcool123/BlockTunerMo
 
 ### How to Use BlockTuner
 
-`Ctrl` + Right clock on a note block to open tuning UI. Placing a note block while holding `Ctrl` also opens tuning UI automatically.
+`Ctrl` + Right clock on a note block to open up tuning UI. Placing a note block while holding `Ctrl` also opens the UI automatically.
 
 `Ctrl` to show the note of the note block at crosshair.
 
@@ -26,7 +26,9 @@ You can get the latest version [here](https://github.com/xwjcool123/BlockTunerMo
 
 Right click note blocks with blaze rods to play with right clicks without tuning.
 
-### Tuning GUI
+*Note: if you are using BlockTuner 1.0.0 (Minecraft 1.18.2) or lower, you don't need to hold `Ctrl` to open up the tuning UI. Instead, use `/blocktuner` to toggle this.
+
+### Tuning UI
 
 Top-right corner (from left to right)
 
