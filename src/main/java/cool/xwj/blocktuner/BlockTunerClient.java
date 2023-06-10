@@ -25,9 +25,11 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.*;
@@ -40,7 +42,7 @@ public class BlockTunerClient implements ClientModInitializer {
 
     public static final Vector<MidiDevice> transmitters = new Vector<>(0, 1);
     private static int deviceIndex = 0;
-    private boolean blockTunerServer = false;
+    private static boolean onBlockTunerServer = false;
 
     @Override
     public void onInitializeClient() {
@@ -48,13 +50,17 @@ public class BlockTunerClient implements ClientModInitializer {
         refreshMidiDevice();
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            if(blockTunerServer
-                    && !player.isSneaking()
-                    && world.getBlockState(hitResult.getBlockPos()).getBlock() == Blocks.NOTE_BLOCK
-                    && !player.isSpectator()
-                    && player.getMainHandStack().getItem() != Items.BLAZE_ROD) {
-                MinecraftClient.getInstance().setScreen(new TuningScreen(Text.empty(), hitResult.getBlockPos()));
-                return ActionResult.FAIL;
+            if (onBlockTunerServer && Screen.hasControlDown() && !player.isSpectator()) {
+                MinecraftClient client = MinecraftClient.getInstance();
+                if (!player.isSneaking()
+                        && world.getBlockState(hitResult.getBlockPos()).getBlock() == Blocks.NOTE_BLOCK
+                        && player.getMainHandStack().getItem() != Items.BLAZE_ROD) {
+                    client.execute(() -> client.setScreen(new TuningScreen(Text.empty(), hitResult.getBlockPos())));
+                    return ActionResult.FAIL;
+                }
+                if ((hand == Hand.MAIN_HAND ? player.getMainHandStack() : player.getOffHandStack()).getItem() == Blocks.NOTE_BLOCK.asItem()) {
+                    client.execute(() -> client.setScreen(new TuningScreen(Text.empty(), hitResult.getBlockPos().offset(hitResult.getSide()))));
+                }
             }
             return ActionResult.PASS;
         });
@@ -63,13 +69,10 @@ public class BlockTunerClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(BlockTuner.CLIENT_CHECK, (client, handler, buf, responseSender) -> {
             int serverProtocol = buf.readInt();
             if (BlockTuner.TUNING_PROTOCOL == serverProtocol) {
-                MinecraftClient.getInstance().execute(() -> blockTunerServer = true);
+                MinecraftClient.getInstance().execute(() -> onBlockTunerServer = true);
             }
-
         });
-
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> blockTunerServer = false);
-
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> onBlockTunerServer = false);
     }
 
     public static int getDeviceIndex() {
@@ -86,7 +89,6 @@ public class BlockTunerClient implements ClientModInitializer {
             deviceIndex = 0;
             BlockTunerConfig.setMidiDeviceName("");
         }
-
     }
 
     @Nullable
@@ -114,13 +116,9 @@ public class BlockTunerClient implements ClientModInitializer {
                     if (info.getName().equals(BlockTunerConfig.getMidiDeviceName())) {
                         deviceIndex = transmitters.size() - 1;
                     }
-
                 }
-
             } catch (MidiUnavailableException ignored) {}
-
         }
-
     }
 
     public static String getNoteName(int note) {
