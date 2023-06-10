@@ -10,19 +10,19 @@ This mod requires fabric API.
 
 ### Installation
 
-Put this mod in your `mods` folder. You also need to install [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) if you haven't installed it yet.
+Put this mod in your `mods` folder. You also need to install [Fabric API](https://modrinth.com/mod/fabric-api) if you haven't installed it yet.
 
 This mod also works on servers and require no client installation.
 
-You can get the latest copy [here](https://github.com/xwjcool123/BlockTunerMod/releases/latest) or find a specific release [here](https://github.com/xwjcool123/BlockTunerMod/releases)
+You can get the latest version [here](https://github.com/xwjcool123/BlockTunerMod/releases/latest) or find a specific release [here](https://github.com/xwjcool123/BlockTunerMod/releases)
 
 ### How to Use BlockTuner
 
-Right clock on note blocks to open tuning GUI. Placing an untuned note block also opens tuning GUI automatically. Use command `/blocktuner` to toggle these.
+`Ctrl` + Right clock on a note block to open tuning UI. Placing a note block while holding `Ctrl` also opens tuning UI automatically.
 
-`Ctrl` to show note name of the note block at crosshair.
+`Ctrl` to show the note of the note block at crosshair.
 
-`Ctrl` + middle click on note blocks will give you readily tuned note blocks. Placing these won't open tuning GUI.
+`Ctrl` + middle click on note blocks to pick up readily tuned note blocks.
 
 Right click note blocks with blaze rods to play with right clicks without tuning.
 
@@ -32,7 +32,7 @@ Top-right corner (from left to right)
 
 * ![](https://xwj.cool/img/blocktuner/btWidget1.png) Play mode - toggle whether the GUI will turn off immediately upon clicking a note on the piano keyboard.
 * ![](https://xwj.cool/img/blocktuner/btWidget2.png) Typing keyboard to piano keyboard - toggle whether you want to play the piano keyboard using your computer keyboard.
-* ![](https://xwj.cool/img/blocktuner/btWidget3.png) MIDI Device - Click to cycle through available MIDI input devices. The icon shows red if the device is currently occupied by other programs.
+* ![](https://xwj.cool/img/blocktuner/btWidget3.png) MIDI Device - Click to cycle through available MIDI input devices. The icon shows red if the device is currently unavailable. This usually means it is being used by another program.
 
 ### Keyboard Mapping:
 ![](https://xwj.cool/img/blocktuner/keymap.png)
