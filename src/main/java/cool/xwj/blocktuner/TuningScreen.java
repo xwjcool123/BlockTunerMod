@@ -157,7 +157,7 @@ public class TuningScreen extends Screen {
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             super.render(matrices, mouseX, mouseY, delta);
             if (this.hovered) {
-                TuningScreen.this.renderTooltip(matrices, Text.literal(BlockTunerClient.getNoteName(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                TuningScreen.this.renderTooltip(matrices, Text.literal(NoteNames.get(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 

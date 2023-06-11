@@ -51,7 +51,7 @@ public class NoteNameHud extends DrawableHelper {
                     int note = state.get(NoteBlock.NOTE);
                     int x = this.client.getWindow().getScaledWidth() / 2 + 4;
                     int y = this.client.getWindow().getScaledHeight() / 2 + 4;
-                    this.textRenderer.drawWithShadow(matrices, BlockTunerClient.getNoteName(note) + ", " + note, x, y, 0x55FFFF);
+                    this.textRenderer.drawWithShadow(matrices, NoteNames.get(note) + ", " + note, x, y, 0x55FFFF);
                 }
             }
         }
