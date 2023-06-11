@@ -23,13 +23,13 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BlockTuner implements ModInitializer {
 
     public static final String MOD_ID = "blocktuner";
-    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final Identifier CLIENT_CHECK = identifier("client_check");
 
     // tuning protocol version. The number on client needs to match that on server.
