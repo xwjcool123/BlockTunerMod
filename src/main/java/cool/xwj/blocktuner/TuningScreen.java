@@ -231,14 +231,13 @@ public class TuningScreen extends Screen {
 
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            boolean mask = mouseX >= this.getX() + 8 - 8 * keyShape && mouseY >= this.getY() && mouseX < this.getX() + 24 - 8 * keyShape && mouseY < this.getY() + 13;
+            this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
+            this.hovered = this.hovered && !mask;
             super.render(matrices, mouseX, mouseY, delta);
             if (!this.visible) {
                 return;
             }
-            boolean mask = mouseX >= this.getX() + 8 - 8 * keyShape && mouseY >= this.getY() && mouseX < this.getX() + 24 - 8 * keyShape && mouseY < this.getY() + 13;
-            this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
-            this.hovered = this.hovered && !mask;
-
             this.renderButton(matrices, mouseX, mouseY, delta);
         }
 

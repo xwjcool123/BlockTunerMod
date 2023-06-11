@@ -17,7 +17,7 @@
 
 package cool.xwj.blocktuner.mixin;
 
-import cool.xwj.blocktuner.BlockTunerClient;
+import cool.xwj.blocktuner.NoteNames;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -49,7 +49,7 @@ public class NoteNameMixin {
                 }
             }
             cir.setReturnValue(MutableText.of(new TranslatableTextContent(((ItemStack)(Object)this).getTranslationKey(), null, null))
-                    .append(MutableText.of(new LiteralTextContent(" (" + BlockTunerClient.getNoteName(note) + ", "+ note + ")")).setStyle(NOTE_STYLE)));
+                    .append(MutableText.of(new LiteralTextContent(" (" + NoteNames.get(note) + ", "+ note + ")")).setStyle(NOTE_STYLE)));
         }
     }
 }
