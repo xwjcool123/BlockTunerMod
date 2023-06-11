@@ -155,7 +155,7 @@ public class TuningScreen extends Screen {
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
             super.render(context, mouseX, mouseY, delta);
             if (this.hovered) {
-                context.drawTooltip(TuningScreen.this.textRenderer, Text.literal(BlockTunerClient.getNoteName(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
+                context.drawTooltip(TuningScreen.this.textRenderer, Text.literal(NoteNames.get(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
 
@@ -228,14 +228,13 @@ public class TuningScreen extends Screen {
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            boolean mask = mouseX >= this.getX() + 8 - 8 * keyShape && mouseY >= this.getY() && mouseX < this.getX() + 24 - 8 * keyShape && mouseY < this.getY() + 13;
+            this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
+            this.hovered = this.hovered && !mask;
             super.render(context, mouseX, mouseY, delta);
             if (!this.visible) {
                 return;
             }
-            boolean mask = mouseX >= this.getX() + 8 - 8 * keyShape && mouseY >= this.getY() && mouseX < this.getX() + 24 - 8 * keyShape && mouseY < this.getY() + 13;
-            this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
-            this.hovered = this.hovered && !mask;
-
             this.renderButton(context, mouseX, mouseY, delta);
         }
 
@@ -268,7 +267,7 @@ public class TuningScreen extends Screen {
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
             super.render(context, mouseX, mouseY, delta);
-            if (this.hovered) {
+            if (this.isHovered()) {
                 context.drawTooltip(TuningScreen.this.textRenderer, PLAY_MODE_TOGGLE_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
@@ -305,7 +304,7 @@ public class TuningScreen extends Screen {
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
             super.render(context, mouseX, mouseY, delta);
-            if (this.hovered) {
+            if (this.isHovered()) {
                 context.drawTooltip(TuningScreen.this.textRenderer, KEY_TO_PIANO_TOGGLE_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
@@ -348,7 +347,7 @@ public class TuningScreen extends Screen {
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
             super.render(context, mouseX, mouseY, delta);
-            if (this.hovered) {
+            if (this.isHovered()) {
                 context.drawTooltip(TuningScreen.this.textRenderer, Text.translatable("settings.blocktuner.midi_device", deviceName), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
@@ -403,7 +402,7 @@ public class TuningScreen extends Screen {
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
             super.render(context, mouseX, mouseY, delta);
-            if (this.hovered) {
+            if (this.isHovered()) {
                 context.drawTooltip(TuningScreen.this.textRenderer, MIDI_DEVICE_REFRESH_TOOLTIP, TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
         }
