@@ -26,7 +26,11 @@ You can get the latest version [here](https://github.com/xwjcool123/BlockTunerMo
 
 Right click note blocks with blaze rods to play with right clicks without tuning.
 
-*Note: if you are using BlockTuner 1.0.0 (Minecraft 1.18.2) or lower, you don't need to hold `Ctrl` to open up the tuning UI. Instead, use `/blocktuner` to toggle this.
+*Note: 
+
+if you are using BlockTuner 1.0.0 (Minecraft 1.18.2) or lower, you don't need to hold `Ctrl` to open up the tuning UI. Instead, use `/blocktuner` to toggle this.
+
+if you have Tweakeroo installed and have no access to the `Ctrl` key, please go to Tweakaroo configs, find `flexibleBlockPlacementOffset` under `Hot Keys` and set it to something else. e.g. `Right Alt`. Sorry for the inconvenience.
 
 ### Tuning UI
 
