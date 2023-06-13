@@ -20,6 +20,8 @@ package cool.xwj.blocktuner;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
@@ -27,19 +29,22 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+
 import javax.sound.midi.*;
 
 @Environment(EnvType.CLIENT)
 public class TuningScreen extends Screen {
 
     private final BlockPos pos;
-    private final String commandPrefix;
     private PianoKeyWidget pressedKey = null;
     private final PianoKeyWidget[] pianoKeys = new PianoKeyWidget[25];
+    private final MidiManager midiManager;
     private MidiDevice currentDevice;
     private final MidiReceiver receiver;
     private boolean configChanged = false;
@@ -60,9 +65,9 @@ public class TuningScreen extends Screen {
     public TuningScreen(Text title, BlockPos pos) {
         super(title);
         this.pos = pos;
-        this.commandPrefix = "tune " + pos.getX() + ' ' + pos.getY() + ' ' + pos.getZ() + ' ';
 
-        currentDevice = BlockTunerClient.getCurrentDevice();
+        midiManager = MidiManager.getMidiManager();
+        currentDevice = midiManager.getCurrentDevice();
         receiver = new MidiReceiver();
     }
 
@@ -168,7 +173,7 @@ public class TuningScreen extends Screen {
             played = true;
 
             if (client != null && client.player != null && client.getNetworkHandler() != null) {
-                client.getNetworkHandler().sendChatCommand(commandPrefix + note);
+                sendTuningPacket(pos, note);
                 client.player.swingHand(Hand.MAIN_HAND);
             }
 
@@ -364,7 +369,7 @@ public class TuningScreen extends Screen {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
-            if (BlockTunerClient.getDeviceIndex() > 0) {
+            if (midiManager.getDeviceIndex() > 0) {
                 status = 2;
             }
             if (this.isHovered()) {
@@ -383,8 +388,8 @@ public class TuningScreen extends Screen {
                 currentDevice.close();
             }
 
-            BlockTunerClient.loopDeviceIndex();
-            currentDevice = BlockTunerClient.getCurrentDevice();
+            midiManager.loopDeviceIndex();
+            currentDevice = midiManager.getCurrentDevice();
 
             if (currentDevice != null) {
                 BlockTunerConfig.setMidiDeviceName(currentDevice.getDeviceInfo().getName());
@@ -428,7 +433,7 @@ public class TuningScreen extends Screen {
 
         @Override
         public void onClick(double mouseX, double mouseY){
-            BlockTunerClient.refreshMidiDevice();
+            midiManager.refreshMidiDevice();
             if (currentDevice != null) {
                 openCurrentDevice();
             }
@@ -592,6 +597,14 @@ public class TuningScreen extends Screen {
             deviceAvailable = false;
             BlockTuner.LOGGER.info("[BlockTuner] MIDI device \"" + currentDevice.getDeviceInfo().getName() + "\" is currently unavailable. Is it busy or unplugged?");
         }
+    }
+
+    public static void sendTuningPacket(BlockPos pos, int note) {
+        note = MathHelper.clamp(note, 0, 24);
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeBlockPos(pos);
+        buf.writeByte(note);
+        ClientPlayNetworking.send(BlockTuner.TUNING_CHANNEL, buf);
     }
 
     protected static int keyToNote(int scanCode) {

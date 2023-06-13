@@ -35,6 +35,7 @@
     "minecraft": "1.19.*"
   },
   "conflicts": {
-    "noteduplicator": "*"
+    "noteduplicator": "*",
+    "tweakeroo": "*"
   }
 }

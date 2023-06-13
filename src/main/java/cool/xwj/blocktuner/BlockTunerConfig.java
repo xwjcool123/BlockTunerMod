@@ -40,6 +40,7 @@ public class BlockTunerConfig {
     private static boolean keyToPiano = false;
     private static boolean playMode = false;
     static int keySignature = 0;
+    static boolean onBlockTunerServer = false;
 
     public static void save(){
 
