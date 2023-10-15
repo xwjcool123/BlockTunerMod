@@ -17,6 +17,7 @@
 
 package cool.xwj.blocktuner.mixin;
 
+import cool.xwj.blocktuner.BlockTunerClient;
 import cool.xwj.blocktuner.TuningScreen;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -42,13 +43,13 @@ public class NoteBlockMixinClient extends Block {
     @Override
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         ItemStack stack = new ItemStack((NoteBlock) (Object) this);
-        int note = state.get(NoteBlock.NOTE);
 
         if (Screen.hasControlDown()) {
+            int note = state.get(NoteBlock.NOTE);
             NbtCompound tag = new NbtCompound();
 
             tag.putInt("note", note);
-            stack.setSubNbt("BlockStateTag", tag);
+            stack.setSubNbt(BlockTunerClient.BLOCK_STATE_KEY, tag);
         }
         return stack;
     }

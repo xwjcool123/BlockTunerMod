@@ -17,6 +17,7 @@
 
 package cool.xwj.blocktuner.mixin;
 
+import cool.xwj.blocktuner.BlockTunerClient;
 import cool.xwj.blocktuner.NoteNames;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemStack.class)
 public class NoteNameMixin {
 
-    private static final String BLOCK_STATE_KEY = "BlockStateTag";
+
     private static final String NOTE_KEY = "note";
     private static final Style NOTE_STYLE = Style.EMPTY.withColor(Formatting.AQUA);
 
@@ -39,7 +40,7 @@ public class NoteNameMixin {
     private void getNoteName(CallbackInfoReturnable<Text> cir){
         if (((ItemStack)(Object)this).getItem() == Items.NOTE_BLOCK) {
 
-            NbtCompound nbtCompound = ((ItemStack)(Object)this).getSubNbt(BLOCK_STATE_KEY);
+            NbtCompound nbtCompound = ((ItemStack)(Object)this).getSubNbt(BlockTunerClient.BLOCK_STATE_KEY);
             int note = 0;
 
             if (nbtCompound != null && nbtCompound.contains(NOTE_KEY, 3)) {
