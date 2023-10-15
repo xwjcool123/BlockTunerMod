@@ -32,6 +32,7 @@ import net.minecraft.util.ActionResult;
 
 @Environment(EnvType.CLIENT)
 public class BlockTunerClient implements ClientModInitializer {
+    public static final String BLOCK_STATE_KEY = "BlockStateTag";
 
     @Override
     public void onInitializeClient() {
