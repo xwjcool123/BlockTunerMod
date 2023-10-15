@@ -31,16 +31,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
 
-    private NoteNameHud noteNameHud;
-
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void newNoteNameHud(MinecraftClient client, ItemRenderer renderer, CallbackInfo ci) {
-        noteNameHud = new NoteNameHud(client);
-    }
 
     @Inject(method = "render", at = @At("TAIL"))
     private void renderNoteNameHud(DrawContext context, float tickDelta, CallbackInfo ci) {
-        this.noteNameHud.render(context);
+        NoteNameHud.render(context);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }
