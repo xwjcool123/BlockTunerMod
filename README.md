@@ -2,7 +2,11 @@
 
 ## About
 
-This is the fabric version of BlockTuner. If you want the data pack for older versions of Minecraft, please visit [this page](https://github.com/xwjcool123/blocktuner).
+This is the fabric version of BlockTuner. 
+
+If you want a forge version, please visit [this page](https://github.com/APeng215/BlockTuner-forge).
+
+If you want the data pack for older versions of Minecraft, please visit [this page](https://github.com/xwjcool123/blocktuner).
 
 This mod requires fabric API.
 
