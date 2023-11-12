@@ -2,9 +2,9 @@
 
 ## About
 
-This is the fabric version of BlockTuner so it requires fabric API.
+This is the fabric version of BlockTuner *and* requires fabric API.
 
-If you want a forge version, please visit [this page](https://github.com/APeng215/BlockTuner-forge).
+If you are using forge, you can check out the [forge version](https://github.com/APeng215/BlockTuner-forge) by A_Peng215.
 
 If you want the data pack for older versions of Minecraft, please visit [this page](https://github.com/xwjcool123/blocktuner).
 
@@ -49,6 +49,9 @@ Top-right corner (from left to right)
 ### Localization
 * Russian - [Felix14-v2](https://github.com/Felix14-v2) (Currently outdated)
 * Japanese - [misaka10843](https://github.com/misaka10843) & [hakkaku](https://note.com/hakukak/)
+
+### Forge Port
+* [A_Peng215](https://github.com/APeng215)
 
 ## License
 
