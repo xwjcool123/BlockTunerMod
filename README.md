@@ -2,13 +2,11 @@
 
 ## About
 
-This is the fabric version of BlockTuner. 
+This is the fabric version of BlockTuner so it requires fabric API.
 
 If you want a forge version, please visit [this page](https://github.com/APeng215/BlockTuner-forge).
 
 If you want the data pack for older versions of Minecraft, please visit [this page](https://github.com/xwjcool123/blocktuner).
-
-This mod requires fabric API.
 
 ## Instructions
 
@@ -22,11 +20,11 @@ You can get the latest version [here](https://github.com/xwjcool123/BlockTunerMo
 
 ### How to Use BlockTuner
 
-`Ctrl` + Right clock on a note block to open up tuning UI. Placing a note block while holding `Ctrl` also opens the UI automatically.
+`Ctrl` + `Right click` on a note block to open up tuning UI. Placing a note block while holding `Ctrl` also opens the UI automatically.
 
 `Ctrl` to show the note of the note block at crosshair.
 
-`Ctrl` + middle click on note blocks to pick up readily tuned note blocks.
+`Ctrl` + `Middle click` on note blocks to pick up readily tuned note blocks.
 
 Right click note blocks with blaze rods to play with right clicks without tuning.
 
