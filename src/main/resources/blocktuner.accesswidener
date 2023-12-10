@@ -1,0 +1,4 @@
+accessWidener v2 named
+
+# This will give us L-shaped piano keys
+extendable method net/minecraft/client/gui/widget/ClickableWidget render (Lnet/minecraft/client/gui/DrawContext;IIF)V

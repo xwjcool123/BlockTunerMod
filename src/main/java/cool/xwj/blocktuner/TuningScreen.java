@@ -121,8 +121,6 @@ public class TuningScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
-        this.drawBackground(context, delta, mouseX, mouseY);
         super.render(context, mouseX, mouseY, delta);
     }
 
@@ -131,6 +129,12 @@ public class TuningScreen extends Screen {
         if (client == null || client.world == null || client.world.getBlockState(pos).getBlock() != Blocks.NOTE_BLOCK) {
             this.close();
         }
+    }
+
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
+        this.drawBackground(context, delta, mouseX, mouseY);
     }
 
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
@@ -158,10 +162,13 @@ public class TuningScreen extends Screen {
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-            super.render(context, mouseX, mouseY, delta);
+            if (!this.visible) {
+                return;
+            }
             if (this.hovered) {
                 context.drawTooltip(TuningScreen.this.textRenderer, Text.literal(NoteNames.get(note)), TuningScreen.this.x - 8 , TuningScreen.this.y - 2);
             }
+            renderWidget(context, mouseX, mouseY, delta);
         }
 
         @Override
@@ -210,7 +217,13 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
+            super.render(context, mouseX, mouseY, delta);
+        }
+
+        @Override
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -237,14 +250,10 @@ public class TuningScreen extends Screen {
             this.hovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
             this.hovered = this.hovered && !mask;
             super.render(context, mouseX, mouseY, delta);
-            if (!this.visible) {
-                return;
-            }
-            this.renderButton(context, mouseX, mouseY, delta);
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -278,7 +287,7 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -315,7 +324,7 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -358,7 +367,7 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -413,7 +422,7 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -460,7 +469,7 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;
@@ -486,7 +495,7 @@ public class TuningScreen extends Screen {
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+        public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             int status = 0;

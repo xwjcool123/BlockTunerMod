@@ -50,7 +50,7 @@ public class NoteNameMixin {
                 }
             }
             cir.setReturnValue(MutableText.of(new TranslatableTextContent(((ItemStack)(Object)this).getTranslationKey(), null, null))
-                    .append(MutableText.of(new LiteralTextContent(" (" + NoteNames.get(note) + ", "+ note + ")")).setStyle(NOTE_STYLE)));
+                    .append(MutableText.of(new PlainTextContent.Literal(" (" + NoteNames.get(note) + ", "+ note + ")")).setStyle(NOTE_STYLE)));
         }
     }
 }

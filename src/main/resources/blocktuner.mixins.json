@@ -8,8 +8,8 @@
   ],
   "client": [
     "InGameHudMixin",
-    "NoteNameMixin",
-    "NoteBlockMixinClient"
+    "NoteBlockMixinClient",
+    "NoteNameMixin"
   ],
   "injectors": {
     "defaultRequire": 1
