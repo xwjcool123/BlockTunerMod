@@ -21,7 +21,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NoteBlock;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.hit.BlockHitResult;
@@ -30,27 +29,20 @@ import net.minecraft.util.math.BlockPos;
 
 public class NoteNameHud {
 
-    private final MinecraftClient client;
-    private final TextRenderer textRenderer;
-
-    public NoteNameHud(MinecraftClient client) {
-        this.client = client;
-        this.textRenderer = client.textRenderer;
-    }
-
-    public void render(DrawContext context) {
-        assert this.client.world != null;
-        assert this.client.player != null;
-        if(Screen.hasControlDown() && !this.client.player.isSpectator()) {
+    public static void render(DrawContext context) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        assert client.world != null;
+        assert client.player != null;
+        if(Screen.hasControlDown() && !client.player.isSpectator()) {
             HitResult hitResult = client.crosshairTarget;
             if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK) {
                 BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
-                BlockState state = this.client.world.getBlockState(blockPos);
+                BlockState state = client.world.getBlockState(blockPos);
                 if (state.getBlock() == Blocks.NOTE_BLOCK) {
                     int note = state.get(NoteBlock.NOTE);
-                    int x = this.client.getWindow().getScaledWidth() / 2 + 4;
-                    int y = this.client.getWindow().getScaledHeight() / 2 + 4;
-                    context.drawText(this.textRenderer, NoteNames.get(note) + ", " + note, x, y, 0x55FFFF, true);
+                    int x = client.getWindow().getScaledWidth() / 2 + 4;
+                    int y = client.getWindow().getScaledHeight() / 2 + 4;
+                    context.drawText(client.textRenderer, NoteNames.get(note) + ", " + note, x, y, 0x55FFFF, true);
                 }
             }
         }
